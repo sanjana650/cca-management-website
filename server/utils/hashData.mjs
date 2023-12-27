@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt"; //password handler
 
+//hash the data
 const hashData = async (data, saltRounds = 10) => {
   try {
     const hashedData = await bcrypt.hash(data, saltRounds);
@@ -10,6 +11,7 @@ const hashData = async (data, saltRounds = 10) => {
   }
 };
 
+//check if the user given (hashed) data matches the hashed data stored in db
 const verifyHashedData = async (unhashed, hashed) => {
   try {
     const match = await bcrypt.compare(unhashed, hashed);

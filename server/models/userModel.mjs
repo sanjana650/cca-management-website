@@ -9,6 +9,9 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   token: { type: String }, //jwt token
   events_signedup: { type: Array },
+  role: { type: String },
+  verified: { type: Boolean, default: false },
+  login_verified: { type: Boolean, default: false }
 });
 
 const UserModel = mongoose.model('users', userSchema);

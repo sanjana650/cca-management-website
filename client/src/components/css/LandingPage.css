@@ -1,0 +1,51 @@
+/* landingPage.css */
+
+.landing-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.background-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  filter: brightness(0.5); /* You can adjust the brightness for better visibility of text */
+  z-index: -1; /* Set a lower z-index for the background image */
+
+}
+
+.content-box {
+  background-color: pink;
+  padding: 50px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+.buttons {
+  display: center-block;
+  justify-content: space-between;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  background-color: #3498db; /* You can change the color */
+  color: white;
+}
+
+button:hover {
+  background-color: #2980b9; /* Change the hover color */
+}
