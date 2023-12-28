@@ -1,5 +1,8 @@
 import express from "express";
-import { checkUserLoginCred, verifyLoginOTP, createNewUserSendOTP, verifySignupOTP, resendSignupOTP, checkAdminLoginCred } from "../controller/userController.mjs" //controller
+import { checkUserLoginCred, verifyLoginOTP, createNewUserSendOTP, verifySignupOTP, resendSignupOTP, checkAdminLoginCred, viewProfile } from "../controller/userController.mjs" //controller
+import { verifyToken } from "../utils/auth.mjs";
+import User from "../models/userModel.mjs";
+
 
 const router = express.Router();
 
@@ -68,6 +71,13 @@ router.post('/verify-login-otp', async (req, res) => {
     res.status(400).send(error.message || "An error occurred");
   }
 });
+
+
+// //ensure user is indeed logged in 
+// router.get("/isUserAuth", verifyToken, (req, res) => {
+//   return res.json({ isLoggedIn: true, })
+// })
+
 
 router.post('/signup-and-send-otp', async (req, res) => {
   try {
@@ -141,6 +151,21 @@ router.post('/resend-signup-otp', async (req, res) => {
 
   }
 })
+
+
+
+router.get('/view-profile/:id', verifyToken, async (req, res) => {
+  try {
+    const { userId, role } = req.currentUser;
+    const { id } = req.params;
+
+    const userProfile = await viewProfile({ userId, role, id });
+    res.json(userProfile);
+  } catch (error) {
+    console.error(error);
+    res.status(error.message).json('Internal server error');
+  }
+});
 
 
 export default router;

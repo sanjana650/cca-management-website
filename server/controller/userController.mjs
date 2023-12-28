@@ -3,10 +3,23 @@ import OTP from "../models/otpModel.mjs";
 import { hashData, verifyHashedData } from "../utils/hashData.mjs";
 import { generateOTP, verifyOTP } from "../utils/otpUtils.mjs";
 import { sendEmail } from "../utils/sendEmail.mjs";
+import jwt from 'jsonwebtoken';
+import dotenv from "dotenv";
 
-const { AUTH_EMAIL } = process.env;
+dotenv.config();
+const { AUTH_EMAIL, TOKEN_EXPIRY, TOKEN_KEY } = process.env;
 
 //LOGIN
+
+//create a JWT token
+const createToken = (data) => {
+  // Use a secure, random secret key for signing the token
+  const secretKey = TOKEN_KEY;
+
+  // Create the token with an expiration time (e.g., 1 hour)
+  const token = jwt.sign(data, secretKey, { expiresIn: TOKEN_EXPIRY }); // Pass expiresIn as an options object
+  return token;
+};
 
 //function that checks if credentials are valid and then calls the function to verify if otp is correct
 const checkUserLoginCred = async (data) => {
@@ -185,23 +198,20 @@ const verifyLoginOTP = async (data) => {
       return { error: otpResult.error };
     }
 
-
     // OTP verification succeeded, update login_verified status
     fetchedUser.login_verified = true;
     await fetchedUser.save();
 
-    // Return user details
-    const user = await User.findOne({ email });
 
-    // create a new token if password matches (you might want to uncomment this)
-    // const tokenData = { userId: fetchedUser._id, email };
-    // const token = await createToken(tokenData);
+    // create a new token if password matches 
+    const tokenData = {
+      userId: fetchedUser._id,
+      email: fetchedUser.email,
+      role: fetchedUser.role, 
+    };
+    const token = await createToken(tokenData);
 
-    // assign user token (you might want to uncomment this)
-    // fetchedUser.token = token;
-    // await fetchedUser.save(); // SAVE TOKEN TO DB
-
-    return { email, user }; // Return the result here
+    return { token }; // Return the result here
   } catch (error) {
     throw error;
   }
@@ -355,4 +365,26 @@ const resendSignupOTP = async (data) => {
   }
 };
 
-export { checkUserLoginCred, verifyLoginOTP, createNewUserSendOTP, verifySignupOTP, resendSignupOTP, checkAdminLoginCred };
+//view profile
+const viewProfile = async (data) => {
+  try {
+    const { userId, role, id } = data;
+    // check if id and userId match and role is member
+    if (userId !== id && role !== 'member') {
+      return { error: "Permission denied" };
+    }
+
+    // fetch user profile from the database based on id
+    const userProfile = await User.findById(id);
+
+    if (!userProfile) {
+      return { error: 'User profile not found' };
+
+    }
+    return { userProfile };
+  } catch (error) {
+    throw error;
+  }
+};
+
+export { checkUserLoginCred, verifyLoginOTP, createNewUserSendOTP, verifySignupOTP, resendSignupOTP, checkAdminLoginCred, viewProfile };

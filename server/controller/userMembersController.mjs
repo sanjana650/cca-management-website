@@ -1,0 +1,47 @@
+import userModel from "../models/userModel.mjs";
+
+const userViewAllMembers = async (req, res) => {
+  try {
+    const role = 'member';
+    //specify the fields to display
+    const fieldsToDisplay = 'name email age diploma about ';
+    //select specific fields to display
+    const view = await userModel.find({ role }, fieldsToDisplay);
+    res.json(view)
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+
+  }
+}
+
+const userSearchMember = async (req, res) => {
+  try {
+    const { name } = req.params;
+    console.log('Search query:', name);
+
+    if (!name) {
+      return res.status(400).json({ error: "Name parameter is required for search." });
+    }
+
+    const role = 'member';
+    const fieldsToDisplay = 'name email age diploma about';
+
+    const searchResults = await userModel.find(
+      { name: { $regex: new RegExp(name, 'i') }, role },
+      fieldsToDisplay
+    );
+
+    console.log('Search Results:', searchResults);
+    console.log(searchResults.length);
+
+    if (searchResults.length === 0) {
+      return res.status(404).json({ message: "No matching members found." });
+    }
+
+    res.json(searchResults);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export { userViewAllMembers, userSearchMember };

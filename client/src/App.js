@@ -8,6 +8,7 @@ import { UserHome } from "./components/UserHome";
 import { UserSignUp } from "./components/UserSignUp";
 import { UserSignupOtp } from "./components/UserSignupOtp";
 import { UserSignupResendOTP } from "./components/UserSignupResendOtp";
+import { AdminHome } from "./components/AdminHome";
 
 function App() {
   return (
@@ -18,10 +19,9 @@ function App() {
         <Route exact path="/user-login-otp/:email" element={<UserLoginOtp />} />
         <Route exact path="/user-signup" element={<UserSignUp />} />
         <Route path="/user-signup-otp/:email" element={<UserSignupOtp />} />
-
         <Route exact path="/user-resend-signup-otp" element={<UserSignupResendOTP />} />
 
-
+        <Route exact path="/admin-home" element={<AdminHome />} />
         <Route exact path="/user-home" element={<UserHome />} />
 
       </Routes>

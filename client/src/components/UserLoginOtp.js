@@ -29,8 +29,17 @@ export const UserLoginOtp = () => {
       if (response.data.error) {
         alert(response.data.error); // Display error message if OTP verification fails
       } else {
-        // OTP verification succeeded, navigate to the user's home page
-        navigate('/user-home');
+
+        //save token to local storage
+        const userRole = response.data.token.role;
+        console.log(userRole);
+        if (userRole === 'user') {
+          navigate('/user-home', { replace: true });
+        } else if (userRole === 'admin') {
+          navigate('/admin-home', { replace: true });
+        }
+        localStorage.setItem("token", response.data.token);
+
       }
 
       console.log(response.data);
@@ -39,6 +48,8 @@ export const UserLoginOtp = () => {
       console.error('Error during OTP verification:', error.message);
     }
   };
+
+
 
   const navResendLoginOTP = (event) => {
     event.preventDefault();

@@ -7,7 +7,6 @@ const userSchema = new mongoose.Schema({
   diploma: { type: String, required: true },
   about: { type: String, required: true },
   password: { type: String, required: true },
-  token: { type: String }, //jwt token
   events_signedup: { type: Array },
   role: { type: String },
   verified: { type: Boolean, default: false },
