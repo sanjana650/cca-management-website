@@ -13,11 +13,10 @@ const { AUTH_EMAIL, TOKEN_EXPIRY, TOKEN_KEY } = process.env;
 
 //create a JWT token
 const createToken = (data) => {
-  // Use a secure, random secret key for signing the token
   const secretKey = TOKEN_KEY;
 
-  // Create the token with an expiration time (e.g., 1 hour)
-  const token = jwt.sign(data, secretKey, { expiresIn: TOKEN_EXPIRY }); // Pass expiresIn as an options object
+  // Create the token with an expiration time 
+  const token = jwt.sign(data, secretKey, { expiresIn: TOKEN_EXPIRY });
   return token;
 };
 
@@ -207,7 +206,7 @@ const verifyLoginOTP = async (data) => {
     const tokenData = {
       userId: fetchedUser._id,
       email: fetchedUser.email,
-      role: fetchedUser.role, 
+      role: fetchedUser.role,
     };
     const token = await createToken(tokenData);
 
@@ -217,23 +216,21 @@ const verifyLoginOTP = async (data) => {
   }
 };
 
-
-//sign up and send verification otp email 
+// Sign up and send verification OTP email
 const createNewUserSendOTP = async (data) => {
   try {
-    const { email, name, age, diploma, about, password, role } = data;
+    const { profile_pic, email, name, age, diploma, about, password, role } = data;
 
-    //checking if user already exists
+    // Checking if user already exists
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
       return { error: "User with provided email already exists" };
-    }
-
-    else {
-      //hash password
+    } else {
+      // Hash password
       const hashedPassword = await hashData(password);
       const newUser = new User({
+        profile_pic,
         email,
         name,
         age,
@@ -242,7 +239,8 @@ const createNewUserSendOTP = async (data) => {
         password: hashedPassword,
         role
       });
-      //save user
+
+      // Save user
       const createdUser = await newUser.save();
 
       // If credentials are correct, send verification OTP
@@ -253,9 +251,8 @@ const createNewUserSendOTP = async (data) => {
         duration: 30, // Set duration to 30 seconds
       };
 
-      //send otp email
-      await sendVerificationOTP(signupVerificationOptions)
-
+      // Send OTP email
+      await sendVerificationOTP(signupVerificationOptions);
 
       return createdUser;
     }
@@ -263,8 +260,7 @@ const createNewUserSendOTP = async (data) => {
   } catch (error) {
     throw error;
   }
-}
-
+};
 //verify signup otp & make user verified
 const verifySignupOTP = async (data) => {
   try {
@@ -368,11 +364,11 @@ const resendSignupOTP = async (data) => {
 //view profile
 const viewProfile = async (data) => {
   try {
-    const { userId, role, id } = data;
+    const {  id } = data;
     // check if id and userId match and role is member
-    if (userId !== id && role !== 'member') {
-      return { error: "Permission denied" };
-    }
+    // if (!id || role !== 'member') {
+    //   return { error: "Permission denied" };
+    // }
 
     // fetch user profile from the database based on id
     const userProfile = await User.findById(id);

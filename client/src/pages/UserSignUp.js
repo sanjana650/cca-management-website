@@ -1,7 +1,8 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import axios from 'axios';
 import { Link } from "react-router-dom";
+import imageCompression from 'browser-image-compression';
 
 export const UserSignUp = () => {
   const [form, setForm] = useState({
@@ -12,6 +13,9 @@ export const UserSignUp = () => {
     about: "",
     password: "",
   });
+
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [loading, setLoading] = useState(false); // New state for loading indicator
   const navigate = useNavigate();
 
   // Update the state properties for the forms every time there is a change
@@ -19,30 +23,65 @@ export const UserSignUp = () => {
     setForm((prev) => ({ ...prev, ...value }));
   }
 
+  //handle image selection and convert to base64 URL
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      try {
+        const compressedImage = await imageCompression(file, {
+          quality: 0.6, //quality of img
+        });
+
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setSelectedImage(reader.result);
+        };
+        reader.readAsDataURL(compressedImage);
+      } catch (error) {
+        console.error('Error compressing image:', error.message);
+      }
+    }
+  };
+
   const onSubmit = async (event) => {
     event.preventDefault();
 
-    // Check if email and password are filled
     if (!form.email || !form.name || !form.age || !form.diploma || !form.about || !form.password) {
       alert("Please fill in all the fields");
       return;
     }
 
+    if (!selectedImage) {
+      alert("Please add a profile picture");
+      return;
+    }
+
+    if (form.password.length < 6) {
+      alert("Password must be at least 6 characters long");
+      return;
+    }
+
+
+    //Convert the base64-encoded image to a data URL
+    const imageDataUrl = selectedImage ? selectedImage.split(",")[1] : null;
+
     const userData = {
+      profile_pic: imageDataUrl,  // Updated field name for the base64 image URL
       email: form.email,
       name: form.name,
       age: form.age,
       diploma: form.diploma,
       about: form.about,
       password: form.password,
-    }
+    };
 
     try {
-      const response = await axios.post('http://127.0.0.1:5050/user/signup-and-send-otp', userData);
+      setLoading(true); // Set loading to true before making the request
 
-      // Check if the response contains an error
+      const response = await axios.post('http://127.0.0.1:5050/user/signup-and-send-otp', userData);
+      alert("Verification OTP email sent")
+
       if (response.data.error) {
-        // Display a more user-friendly message or render it on the page
         alert(`Error: ${response.data.error}`);
         console.log(response.data.error);
       } else {
@@ -51,20 +90,21 @@ export const UserSignUp = () => {
       }
     } catch (error) {
       if (error.response && error.response.status === 400) {
-        // Display a more user-friendly message or render it on the page
         alert(`Error: ${error.response.data}`);
       } else {
         console.error('Error during signup request:', error.message);
       }
+    } finally {
+      setLoading(false); // Set loading back to false after the request is complete
     }
   }
 
 
-
-  const sendOtp = async (event) => {
+  const sendOtp = (event) => {
     event.preventDefault();
     navigate('/user-resend-signup-otp');
   }
+
   const navLogin = (event) => {
     event.preventDefault();
     navigate('/user-login');
@@ -75,8 +115,47 @@ export const UserSignUp = () => {
       <div className="background-image" style={{ backgroundImage: `url('https://www.tp.edu.sg/content/dam/tp-web/images/schools---courses/for-prospective-students/all-academic-schools/school-of-informatics---it/information-technology/IIT-t30-tn.jpg')` }}></div>
       <div className="login-container content-box bg-white p-5 rounded text-center">
         <h1>Member Sign Up</h1>
-        <form onSubmit={onSubmit}
-        >
+
+        {/* Image Upload Section */}
+        <div>
+          <input
+            type="file"
+            id="image"
+            accept="image/*"
+            onChange={handleImageChange}
+            style={{ display: 'none' }}
+          />
+          <div className="text-center">
+            <div
+              className="rounded-circle overflow-hidden mx-auto mb-3"
+              style={{ width: '100px', height: '100px', border: '2px solid #007bff' }}
+            >
+              {selectedImage ? (
+                <img
+                  src={selectedImage}
+                  alt="Selected"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              ) : (
+                <img
+                  src="https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg"  // Provide the path to your placeholder image
+                  alt="Placeholder"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              )}
+            </div>
+          </div>
+          <button
+            className="btn btn-primary"
+            onClick={() => document.getElementById('image').click()}
+          >
+            Upload Image
+          </button>
+        </div>
+
+
+        {/* Form Section */}
+        <form onSubmit={onSubmit}>
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <input
@@ -149,20 +228,21 @@ export const UserSignUp = () => {
           <div>
             <h6>
               Already Signed up but need to verify account?{' '}
-              <Link href="#" onClick={sendOtp}>
+              <Link to="#" onClick={sendOtp}>
                 Click Here!
               </Link>
             </h6>
             <h6>
               Already have an account?{' '}
-              <Link href="#" onClick={navLogin}>
+              <Link to="#" onClick={navLogin}>
                 Login
               </Link>
             </h6>
           </div>
         </form>
+        {/* Loading Indicator */}
+        {loading && <p>Loading...</p>}
       </div>
     </div>
   );
-
-}
+};

@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Link } from "react-router-dom";
 
 export const UserLogin = () => {
-  const [isAdmin, setIsAdmin] = useState(false); // State to track whether it's admin login
+  const [isAdmin, setIsAdmin] = useState(false); //state to track whether it's admin login
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -12,7 +12,6 @@ export const UserLogin = () => {
 
   const navigate = useNavigate();
 
-  // Update the state properties for the forms every time there is a change
   function updateForm(value) {
     setForm((prev) => ({ ...prev, ...value }));
   }
@@ -23,28 +22,28 @@ export const UserLogin = () => {
     // Check if email and password are filled
     if (!form.email || !form.password) {
       alert("Please fill in both email and password");
-      return; // Stop further execution
+      return;
     }
 
-    const role = isAdmin ? 'admin' : 'member'; // Assign 'admin' if isAdmin is true, 'member' otherwise
+    const role = isAdmin ? 'admin' : 'member'; //assign 'admin' if isAdmin is true, 'member' otherwise
 
     const userData = {
       email: form.email,
       password: form.password,
-      role, // Pass the role to the backend
+      role,
     };
 
-    let response; // Declare the response variable
+    let response;
 
     try {
       if (isAdmin) {
-        // If it's admin login, execute admin login logic
+
         response = await axios.post(
           "http://127.0.0.1:5050/user/admin-login-and-send-otp",
           userData
         );
 
-        // Check specific error messages
+        //check specific error messages
         if (response.data.error) {
           if (response.data.error === "Invalid password entered") {
             alert("Invalid password. Please check your password and try again.");
@@ -56,12 +55,12 @@ export const UserLogin = () => {
             alert("Only admins can log in. Please check the role selection.");
           }
           else {
-            // Display generic error message for other errors
             alert("An error occurred. Please try again later.");
           }
         } else if (!response.data.login_verified) {
           // if login_verified is false, redirect to '/user-login-otp'
           navigate(`/user-login-otp/${form.email}`);
+
         } else {
           // Redirect to another route or perform other actions
           navigate("/");
@@ -72,6 +71,7 @@ export const UserLogin = () => {
           "http://127.0.0.1:5050/user/login-and-send-otp",
           userData
         );
+        alert("Verification OTP email sent")
 
         // Check specific error messages
         if (response.data.error) {
@@ -83,6 +83,9 @@ export const UserLogin = () => {
             alert(response.data.error);
           } else if (response.data.error === "Only members can login") {
             alert("Only admins can log in. Please check the role selection.");
+          }
+          else if (response.data.error === 'Email not found') {
+            alert('Email not found.')
           }
           else {
             // Display generic error message for other errors

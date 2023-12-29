@@ -1,14 +1,15 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
-import { LandingPage } from "./components/LandingPage";
-import { UserLogin } from "./components/UserLogin";
-import { UserLoginOtp } from "./components/UserLoginOtp";
-import { UserHome } from "./components/UserHome";
-import { UserSignUp } from "./components/UserSignUp";
-import { UserSignupOtp } from "./components/UserSignupOtp";
-import { UserSignupResendOTP } from "./components/UserSignupResendOtp";
-import { AdminHome } from "./components/AdminHome";
+import { LandingPage } from "./pages/LandingPage";
+import { UserLogin } from "./pages/UserLogin";
+import { UserLoginOtp } from "./pages/UserLoginOtp";
+import { UserHome } from "./pages/UserHome";
+import { UserSignUp } from "./pages/UserSignUp";
+import { UserSignupOtp } from "./pages/UserSignupOtp";
+import { UserSignupResendOTP } from "./pages/UserSignupResendOtp";
+import { AdminHome } from "./pages/AdminHome";
+import { UserProfile } from "./pages/UserProfile";
 
 function App() {
   return (
@@ -23,6 +24,8 @@ function App() {
 
         <Route exact path="/admin-home" element={<AdminHome />} />
         <Route exact path="/user-home" element={<UserHome />} />
+        <Route exact path="/user-profile" element={<UserProfile />} />
+
 
       </Routes>
     </div>

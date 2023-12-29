@@ -1,0 +1,58 @@
+
+.blue-section {
+  display: flex;
+  justify-content: space-between;
+  padding: 60px; /* Adjust padding as needed */
+  height:  50vh;
+  background-color: #F3FEFE; /* Set the background color */
+}
+
+.blue-section-content {
+  max-width: 40%;
+  color: #000000; /* Set the text color */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.blue-section-image img {
+  width: 100%;
+  max-height: 100%; /* Adjust max-height as needed */
+}
+
+
+.blue-section-content h1 {
+  color: #1D3C8A; /* Set the text color to dark blue */
+  font-weight: bold; /* Make the text bold */
+}
+
+.blue-section-content p{
+  font-weight: bold;
+}
+
+.all-events-button {
+  background-color: #1D3C8A; /* Set the background color to dark blue */
+  color: white; /* Set the text color to white */
+  padding: 10px 20px; /* Adjust padding as needed */
+  width: 110px;
+  font-size: 14px; /* Adjust font size as needed */
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.intro {
+  text-align: center;
+  padding: 50px;
+}
+
+.intro h2{
+  color: 1D3C8A; 
+  font-weight: bold;
+}
+
+.intro h3{
+  color: #7C1E2E; 
+  font-weight: bold;
+}

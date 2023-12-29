@@ -1,8 +1,17 @@
 import express from "express";
 import { checkUserLoginCred, verifyLoginOTP, createNewUserSendOTP, verifySignupOTP, resendSignupOTP, checkAdminLoginCred, viewProfile } from "../controller/userController.mjs" //controller
-import { verifyToken } from "../utils/auth.mjs";
+import { verifyToken, requireMemberRole, requireAdminRole } from "../utils/auth.mjs";
 import User from "../models/userModel.mjs";
 
+import multer from "multer";
+
+const storage = multer.memoryStorage(); // Store image in memory
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1024 * 1024 * 5,
+  },
+});
 
 const router = express.Router();
 
@@ -78,22 +87,28 @@ router.post('/verify-login-otp', async (req, res) => {
 //   return res.json({ isLoggedIn: true, })
 // })
 
-
-router.post('/signup-and-send-otp', async (req, res) => {
+router.post('/signup-and-send-otp', upload.single('image'), async (req, res) => {
   try {
 
-    let { email, name, age, diploma, about, password } = req.body;
+    let { profile_pic, email, name, age, diploma, about, password } = req.body;
+    // Check if a file was uploaded
+    const imageBuffer = req.body.profile_pic;
+
+    if (!imageBuffer) {
+      return res.status(400).json({ error: "No image uploaded" });
+    }
+
 
     // Trim whitespaces from input fields
+    profile_pic = profile_pic.trim();
     email = email.trim();
     name = name.trim();
     diploma = diploma.trim();
     about = about.trim();
     password = password.trim();
 
-
     // Validate input fields
-    if (!email || !name || !age || !diploma || !about || !password) {
+    if (!profile_pic || !email || !name || !age || !diploma || !about || !password) {
       return res.status(400).json({ error: "Empty input fields" });
     }
 
@@ -112,15 +127,25 @@ router.post('/signup-and-send-otp', async (req, res) => {
     // Create user and send verification email
     const role = "member";
     const createdUser = await createNewUserSendOTP({
-      email, name, age, diploma, about, password, role
+      profile_pic: imageBuffer,  // Pass the image buffer to the controller
+      email,
+      name,
+      age,
+      diploma,
+      about,
+      password,
+      role,
     });
 
     res.status(200).json(createdUser);
 
   } catch (error) {
-    res.status(400).send(error.message);
+    console.error('Error during image upload:', error.message);
+    res.status(400).json({ error: 'Bad Request. Check your input data.' });
   }
+
 });
+
 
 //verify sign up otp and change verified status to true
 router.post('/verify-signup-otp', async (req, res) => {
@@ -153,24 +178,34 @@ router.post('/resend-signup-otp', async (req, res) => {
 })
 
 
-
-router.get('/view-profile/:id', verifyToken, async (req, res) => {
+// View profile of the user (requires token verification and 'member' role)
+router.get('/view-profile/:id', verifyToken, requireMemberRole, async (req, res) => {
   try {
-    const { userId, role } = req.currentUser;
     const { id } = req.params;
-
-    const userProfile = await viewProfile({ userId, role, id });
+    const userProfile = await viewProfile({ id });
     res.json(userProfile);
   } catch (error) {
     console.error(error);
-    res.status(error.message).json('Internal server error');
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
 
+//log out
+router.post('/logout', async (req, res) => {
+  try {
+    const { userId } = req.body;
+    const user = await User.findByIdAndUpdate(userId, { $set: { login_verified: false } }, { new: true });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    res.json({ message: 'Logout successful' });
+
+  } catch (error) {
+    console.error('Error during logout:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+})
+
 export default router;
 
-//verifyOTP
-//createToken
-//loginUserAndSendVerificationOTP
-//

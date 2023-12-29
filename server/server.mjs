@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+
 import connectToDb from './db/conn.mjs'; // Imports the function responsible for connecting to the MongoDB database.
 import userRouter from './routes/user.mjs';
 // import otpRouter from './routes/otp.mjs';
@@ -17,14 +18,19 @@ import userRouter from './routes/user.mjs';
 const PORT = process.env.PORT || 5050;
 const app = express();
 
+
+
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 app.use(cors());
-app.use(express.json());
 
-// Connect to MongoDB
+//increase payload size limit for JSON and URL-encoded data like base64
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
+
+
 connectToDb();
 
 app.use("/user", userRouter);

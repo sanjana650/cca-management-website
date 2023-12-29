@@ -1,15 +1,17 @@
-import { useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams} from "react-router";
 import axios from 'axios';
 import { Link } from "react-router-dom";
-
+import { jwtDecode } from "jwt-decode";
+import {  useRequireAuth} from '../components/RequireAuth'
 
 export const UserLoginOtp = () => {
   const [otp, setOtp] = useState("");
   const { email } = useParams(); // Access email from URL parameters
-
   const [attempts, setAttempts] = useState(0);
   const navigate = useNavigate();
+  // useRequireAuth();
+
 
   const updateOtpForm = (e) => {
     setOtp(e.target?.value || '');
@@ -29,17 +31,20 @@ export const UserLoginOtp = () => {
       if (response.data.error) {
         alert(response.data.error); // Display error message if OTP verification fails
       } else {
+        // Save token to local storage
+        localStorage.setItem("token", response.data.token);
+        // Decode token
+        const decodedToken = jwtDecode(response.data.token);
+        console.log(decodedToken);
 
-        //save token to local storage
-        const userRole = response.data.token.role;
-        console.log(userRole);
-        if (userRole === 'user') {
+        const userRole = decodedToken.role;
+
+        if (userRole === 'member') {
           navigate('/user-home', { replace: true });
+
         } else if (userRole === 'admin') {
           navigate('/admin-home', { replace: true });
         }
-        localStorage.setItem("token", response.data.token);
-
       }
 
       console.log(response.data);
@@ -48,8 +53,6 @@ export const UserLoginOtp = () => {
       console.error('Error during OTP verification:', error.message);
     }
   };
-
-
 
   const navResendLoginOTP = (event) => {
     event.preventDefault();
