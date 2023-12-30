@@ -27,7 +27,7 @@ export default function Navbar() {
 
   return (
     <div >
-      <nav className="navbar sticky-top navbar-expand-lg navbar-light custom-navbar" style={{ backgroundColor: "#A6E3E3", padding: '20px' }}>
+      <nav className="navbar navbar-expand-lg navbar-light custom-navbar" style={{ backgroundColor: "#A6E3E3", padding: '20px' }}>
         <div className="container-fluid">
           <div className="navbar-brand">
             <NavLink to="/user-home">
