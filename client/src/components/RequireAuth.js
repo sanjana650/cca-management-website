@@ -22,13 +22,16 @@ export const LogoutUser = async (userId) => {
 //if jwt token isnt valid or does not exist it redirects to landing page & logs user out 
 export const UseRequireAuth = () => {
   const navigate = useNavigate();
+  // console.log("UseRequireAuth hook is running...");
 
   useEffect(() => {
     //check if jwt exists
     const storedToken = localStorage.getItem('token');
 
     if (!storedToken) {
-      navigate('/');
+      // console.log("No token found. Redirecting to /");
+      navigate("/", { replace: true });
+
     } else {
       //decode to see user role & expiry status
       const decodedToken = jwtDecode(storedToken);
@@ -45,6 +48,7 @@ export const UseRequireAuth = () => {
 
         LogoutUser(userId);
       }
+
     }
   }, [navigate]);
 };

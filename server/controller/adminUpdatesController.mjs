@@ -37,7 +37,7 @@ const deleteUpdate = async (req, res) => {
     const deleted = await updatesModel.findByIdAndDelete(req.params.id, { new: true });
 
     if (!deleted) {
-      return res.status(404).json({ message: "Not found" });
+      return { error: "User not found" };
     }
 
     res.json({ message: "Update deleted successfully" });
@@ -56,4 +56,14 @@ const viewAllUpdates = async (req, res) => {
   }
 }
 
-export { createNewUpdate, editUpdate, deleteUpdate, viewAllUpdates };
+const viewSelectedUpdate = async (req, res, data) => {
+  try {
+    const view = await updatesModel.findById(req.params.id);
+    res.json(view)
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+
+  }
+}
+
+export { createNewUpdate, editUpdate, deleteUpdate, viewAllUpdates,viewSelectedUpdate };

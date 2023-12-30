@@ -7,7 +7,7 @@ import { UseRequireAuth } from '../components/RequireAuth'
 
 export const UserHome = () => {
   // const navigate = useNavigate();
-  UseRequireAuth()
+  UseRequireAuth();
 
   return (
     <div>

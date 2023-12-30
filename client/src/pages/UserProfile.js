@@ -1,11 +1,14 @@
 import Navbar from "../components/Navbar";
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode'; // Import the jwt-decode library
+import { jwtDecode } from 'jwt-decode'; 
 import { UseRequireAuth } from '../components/RequireAuth';
 import './css/ProfilePage.css';
 
 export const UserProfile = () => {
+  const navigate = useNavigate();
+
   const [userProfile, setUserProfile] = useState(null);
   UseRequireAuth();
 
@@ -19,17 +22,18 @@ export const UserProfile = () => {
         const decodedToken = jwtDecode(token);
         const userId = decodedToken.userId;
 
+        // Make a GET request to the view-profile endpoint with the token in the header
         const response = await axios.get(`http://127.0.0.1:5050/user/view-profile/${userId}`, {
           headers: {
             Authorization: `Bearer ${token}`, // Send the token in the Authorization header
           },
         });
-
+  
         if (response.status === 200) {
           // Set the user profile state if the request is successful
           setUserProfile(response.data.userProfile);
           // Log user details
-
+          //console.log('Decoded Token:', decodedToken);
           console.log('User Details:', response.data);
         } else {
           const message = `An error occurred: ${response.statusText}`;

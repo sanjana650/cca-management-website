@@ -38,18 +38,20 @@ export const AdminLogin = () => {
       //console.log(response.data);
 
       if (response.data.error) {
-        // Check specific error messages
-        if (response.data.error === "Invalid password entered") {
-          alert("Invalid password. Please check your password and try again.");
-        } else if (
-          response.data.error === "Verify your account first before logging in"
-        ) {
-          alert(response.data.error);
-        } else {
-          // Display generic error message for other errors
-          alert("An error occurred. Please try again later.");
-        }
+   // if (response.data.error === "Invalid password entered") {
+          //   alert("Invalid password. Please check your password and try again.");
+          // } else if (response.data.error === "Verify your account first before logging in") {
+          //   alert(response.data.error);
+          // }
+          // else if (response.data.error === "Only admins can log in") {
+          //   alert("Only admins can log in. Please check the role selection.");
+          // }
+          // else {
+          //   alert("An error occurred. Please try again later.");
+          // }
+          alert('Error: '+response.data.error)
       } else if (!response.data.login_verified) {
+        alert("Verification OTP email sent")
         // if login_verified is false, redirect to '/user-login-otp'
         navigate(`/user-login-otp/${form.email}`);
       } else {

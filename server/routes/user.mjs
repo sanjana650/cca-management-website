@@ -1,5 +1,5 @@
 import express from "express";
-import { checkUserLoginCred, verifyLoginOTP, createNewUserSendOTP, verifySignupOTP, resendSignupOTP, checkAdminLoginCred, viewProfile } from "../controller/userController.mjs" //controller
+import { checkUserLoginCred, verifyLoginOTP, createNewUserSendOTP, verifySignupOTP, resendSignupOTP, checkAdminLoginCred, viewProfile, editProfile } from "../controller/userController.mjs" //controller
 import { verifyToken, requireMemberRole, requireAdminRole } from "../utils/auth.mjs";
 import User from "../models/userModel.mjs";
 
@@ -81,11 +81,6 @@ router.post('/verify-login-otp', async (req, res) => {
   }
 });
 
-
-// //ensure user is indeed logged in 
-// router.get("/isUserAuth", verifyToken, (req, res) => {
-//   return res.json({ isLoggedIn: true, })
-// })
 
 router.post('/signup-and-send-otp', upload.single('image'), async (req, res) => {
   try {
@@ -181,14 +176,55 @@ router.post('/resend-signup-otp', async (req, res) => {
 // View profile of the user (requires token verification and 'member' role)
 router.get('/view-profile/:id', verifyToken, requireMemberRole, async (req, res) => {
   try {
-    const { id } = req.params;
-    const userProfile = await viewProfile({ id });
+    let { id } = req.params;
+    let userProfile = await viewProfile({ id });
     res.json(userProfile);
   } catch (error) {
     console.error(error);
+    res.status(400).send(error.message);
+  }
+});
+
+//edit profile
+// router.patch('/edit-profile/:id', verifyToken, requireMemberRole, async (req, res) => {
+//   try {
+//     let { id } = req.params;
+//     let { profile_pic, name, age, diploma, about, password } = req.body;
+//     let updatedProfile = await editProfile({ id, profile_pic, name, age, diploma, about, password });
+//     res.json(updatedProfile);
+//   } catch (error) {
+//     res.status(400).send(error.message);
+//   }
+// })
+router.patch('/edit-profile/:id', verifyToken, requireMemberRole, upload.single('profile_pic'), async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, age, diploma, about, password } = req.body;
+    const profilePic = req.file; // This should now contain the uploaded file data
+
+    let body = { name, age, diploma, about, password };
+
+    if (profilePic) {
+      // If a new profile picture is uploaded, handle it accordingly
+      // You might want to save the file to disk or a cloud storage service
+      // and store the file path or URL in your database.
+      // For now, I'll assume you save it as a base64-encoded string.
+      body.profile_pic = profilePic.buffer.toString('base64');
+    }
+
+    const updatedUserProfile = await User.findByIdAndUpdate(id, body, { new: true });
+    if (!updatedUserProfile) {
+      return res.status(404).json({ error: 'User profile not found' });
+    }
+
+    return res.status(200).json({ updatedUserProfile });
+  } catch (error) {
+    console.error('Error updating profile:', error.message);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+//delete profile
 
 
 //log out

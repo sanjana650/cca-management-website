@@ -7,12 +7,13 @@ import userRouter from './routes/user.mjs';
 // import emailVerificationRouter from './routes/emailVerification.mjs';
 
 
-// import adminUpdatesRouter from './routes/adminUpdates.mjs';
+import adminUpdatesRouter from './routes/adminUpdates.mjs';
 // import adminMembersRouter from './routes/adminMembers.mjs';
 // import adminEventsRouter from './routes/adminEvents.mjs';
 
 // import userMembersRouter from './routes/userMembers.mjs';
 // import userEventsRouter from './routes/userEvents.mjs';
+import userUpdatesRouter from './routes/userUpdates.mjs';
 
 
 const PORT = process.env.PORT || 5050;
@@ -34,11 +35,12 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 connectToDb();
 
 app.use("/user", userRouter);
+app.use("/user-updates", userUpdatesRouter);
 // app.use("/otp", otpRouter);
 // app.use("/emailVerification", emailVerificationRouter);
 
 
-// app.use("/adminUpdates", adminUpdatesRouter);
+app.use("/admin-updates", adminUpdatesRouter);
 // app.use("/adminMembers", adminMembersRouter);
 // app.use("/adminEvents", adminEventsRouter);
 

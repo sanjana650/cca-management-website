@@ -364,12 +364,7 @@ const resendSignupOTP = async (data) => {
 //view profile
 const viewProfile = async (data) => {
   try {
-    const {  id } = data;
-    // check if id and userId match and role is member
-    // if (!id || role !== 'member') {
-    //   return { error: "Permission denied" };
-    // }
-
+    let { id } = data;
     // fetch user profile from the database based on id
     const userProfile = await User.findById(id);
 
@@ -383,4 +378,23 @@ const viewProfile = async (data) => {
   }
 };
 
-export { checkUserLoginCred, verifyLoginOTP, createNewUserSendOTP, verifySignupOTP, resendSignupOTP, checkAdminLoginCred, viewProfile };
+//edit profile
+const editProfile = async (data) => {
+  try {
+    let { id, profile_pic, name, age, diploma, about, password } = data;
+    let body = { profile_pic, name, age, diploma, about, password };
+    const updatedUserProfile = await User.findByIdAndUpdate(id, body, { new: true });
+    if (!updatedUserProfile) {
+      return { error: 'User profile not found' };
+    }
+    return { updatedUserProfile };
+
+  } catch (error) {
+    throw error;
+
+  }
+}
+
+//delete profile
+
+export { checkUserLoginCred, verifyLoginOTP, createNewUserSendOTP, verifySignupOTP, resendSignupOTP, checkAdminLoginCred, viewProfile, editProfile };

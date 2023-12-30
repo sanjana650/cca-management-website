@@ -2,16 +2,17 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import axios from 'axios';
 import { Link } from "react-router-dom";
+import { jwtDecode } from 'jwt-decode';
 
 export const UserLogin = () => {
+  const navigate = useNavigate();
+
   const [isAdmin, setIsAdmin] = useState(false); //state to track whether it's admin login
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
-
-  const navigate = useNavigate();
-
+  
   function updateForm(value) {
     setForm((prev) => ({ ...prev, ...value }));
   }
@@ -45,18 +46,18 @@ export const UserLogin = () => {
 
         //check specific error messages
         if (response.data.error) {
-          if (response.data.error === "Invalid password entered") {
-            alert("Invalid password. Please check your password and try again.");
-          } else if (
-            response.data.error === "Verify your account first before logging in") {
-            alert(response.data.error);
-          }
-          else if (response.data.error === "Only admins can log in") {
-            alert("Only admins can log in. Please check the role selection.");
-          }
-          else {
-            alert("An error occurred. Please try again later.");
-          }
+          // if (response.data.error === "Invalid password entered") {
+          //   alert("Invalid password. Please check your password and try again.");
+          // } else if (response.data.error === "Verify your account first before logging in") {
+          //   alert(response.data.error);
+          // }
+          // else if (response.data.error === "Only admins can log in") {
+          //   alert("Only admins can log in. Please check the role selection.");
+          // }
+          // else {
+          //   alert("An error occurred. Please try again later.");
+          // }
+          alert('Error: '+response.data.error)
         } else if (!response.data.login_verified) {
           // if login_verified is false, redirect to '/user-login-otp'
           navigate(`/user-login-otp/${form.email}`);
@@ -75,22 +76,23 @@ export const UserLogin = () => {
 
         // Check specific error messages
         if (response.data.error) {
-          if (response.data.error === "Invalid password entered") {
-            alert("Invalid password. Please check your password and try again.");
-          } else if (
-            response.data.error === "Verify your account first before logging in"
-          ) {
-            alert(response.data.error);
-          } else if (response.data.error === "Only members can login") {
-            alert("Only admins can log in. Please check the role selection.");
-          }
-          else if (response.data.error === 'Email not found') {
-            alert('Email not found.')
-          }
-          else {
-            // Display generic error message for other errors
-            alert("An error occurred. Please try again later.");
-          }
+          // if (response.data.error === "Invalid password entered") {
+          //   alert("Invalid password. Please check your password and try again.");
+          // } else if (
+          //   response.data.error === "Verify your account first before logging in"
+          // ) {
+          //   alert(response.data.error);
+          // } else if (response.data.error === "Only members can login") {
+          //   alert("Only admins can log in. Please check the role selection.");
+          // }
+          // else if (response.data.error === 'Email not found') {
+          //   alert('Email not found.')
+          // }
+          // else {
+          //   // Display generic error message for other errors
+          //   alert("An error occurred. Please try again later.");
+          // }
+          alert('Error: '+response.data.error)
         } else if (!response.data.login_verified) {
           // if login_verified is false, redirect to '/user-login-otp'
           navigate(`/user-login-otp/${form.email}`);

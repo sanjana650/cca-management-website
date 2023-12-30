@@ -1,0 +1,10 @@
+/* AdminHome.css */
+
+.admin-home-content {
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  flex-direction: column;
+  text-align: center;
+  padding: 20px; /* Add padding as needed */
+}
