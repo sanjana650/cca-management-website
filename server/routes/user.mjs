@@ -199,10 +199,10 @@ router.get('/view-profile/:id', verifyToken, requireMemberRole, async (req, res)
 router.patch('/edit-profile/:id', verifyToken, requireMemberRole, upload.single('profile_pic'), async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, age, diploma, about, password } = req.body;
+    const { name, age, diploma, about } = req.body;
     const profilePic = req.file; // This should now contain the uploaded file data
 
-    let body = { name, age, diploma, about, password };
+    let body = { name, age, diploma, about };
 
     if (profilePic) {
       // If a new profile picture is uploaded, handle it accordingly
