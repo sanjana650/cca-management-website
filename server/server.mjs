@@ -11,7 +11,7 @@ import adminUpdatesRouter from './routes/adminUpdates.mjs';
 // import adminMembersRouter from './routes/adminMembers.mjs';
 // import adminEventsRouter from './routes/adminEvents.mjs';
 
-// import userMembersRouter from './routes/userMembers.mjs';
+import userMembersRouter from './routes/userMembers.mjs';
 // import userEventsRouter from './routes/userEvents.mjs';
 import userUpdatesRouter from './routes/userUpdates.mjs';
 
@@ -44,7 +44,7 @@ app.use("/admin-updates", adminUpdatesRouter);
 // app.use("/adminMembers", adminMembersRouter);
 // app.use("/adminEvents", adminEventsRouter);
 
-// app.use("/userMembers", userMembersRouter);
+app.use("/user-members", userMembersRouter);
 // app.use("/userEvents", userEventsRouter);
 
 

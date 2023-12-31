@@ -4,7 +4,7 @@ const userViewAllMembers = async (req, res) => {
   try {
     const role = 'member';
     //specify the fields to display
-    const fieldsToDisplay = 'name email age diploma about ';
+    const fieldsToDisplay = 'profile_pic name email age diploma about ';
     //select specific fields to display
     const view = await userModel.find({ role }, fieldsToDisplay);
     res.json(view)
@@ -24,7 +24,7 @@ const userSearchMember = async (req, res) => {
     }
 
     const role = 'member';
-    const fieldsToDisplay = 'name email age diploma about';
+    const fieldsToDisplay = 'profile_pic name email age diploma about';
 
     const searchResults = await userModel.find(
       { name: { $regex: new RegExp(name, 'i') }, role },
