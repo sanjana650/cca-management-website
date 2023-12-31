@@ -378,23 +378,47 @@ const viewProfile = async (data) => {
   }
 };
 
-//edit profile
+// edit profile
 const editProfile = async (data) => {
   try {
-    let { id, profile_pic, name, age, diploma, about, password } = data;
-    let body = { profile_pic, name, age, diploma, about, password };
+    const { id, profile_pic, name, age, diploma, about, password } = data;
+
+    // Construct the body with the fields to be updated
+    const body = { name, age, diploma, about, password };
+
+    // If a new profile_pic is provided, update it
+    if (profile_pic) {
+      body.profile_pic = profile_pic;
+    }
+
+    // Find and update the user profile
     const updatedUserProfile = await User.findByIdAndUpdate(id, body, { new: true });
+
+    // Check if the user profile was found
     if (!updatedUserProfile) {
       return { error: 'User profile not found' };
     }
-    return { updatedUserProfile };
 
+    return { updatedUserProfile };
   } catch (error) {
     throw error;
+  }
+};
 
+//delete profile
+const deleteUser = async (req, res) => {
+  try {
+    const deleted = await User.findByIdAndDelete(req.params.id, { new: true });
+
+    if (!deleted) {
+      return { error: "User not found" };
+    }
+
+    res.json({ message: "User deleted successfully" });
+    return deleted;
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 }
 
-//delete profile
-
-export { checkUserLoginCred, verifyLoginOTP, createNewUserSendOTP, verifySignupOTP, resendSignupOTP, checkAdminLoginCred, viewProfile, editProfile };
+export { checkUserLoginCred, verifyLoginOTP, createNewUserSendOTP, verifySignupOTP, resendSignupOTP, checkAdminLoginCred, viewProfile, editProfile, deleteUser };

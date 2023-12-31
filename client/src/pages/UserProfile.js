@@ -12,13 +12,13 @@ export const UserProfile = () => {
   const [userProfile, setUserProfile] = useState(null);
   UseRequireAuth();
 
+  const token = localStorage.getItem('token');
+  const decodedToken = jwtDecode(token);
+  const userId = decodedToken.userId;
+
   useEffect(() => {
     async function getProfile() {
       try {
-        const token = localStorage.getItem('token');
-        const decodedToken = jwtDecode(token);
-        const userId = decodedToken.userId;
-
         const response = await axios.get(`http://127.0.0.1:5050/user/view-profile/${userId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -40,8 +40,32 @@ export const UserProfile = () => {
     getProfile();
   }, []);
 
+  async function deleteProfile(userId) {
+    try {
+      const response = await axios.delete(`http://127.0.0.1:5050/user/delete-profile/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 200) {
+        localStorage.removeItem("token");
+        // Redirect to the home page after successful deletion
+        navigate("/", { replace: true });
+      } else {
+        const message = `An error occurred: ${response.statusText}`;
+        window.alert(message);
+      }
+    } catch (error) {
+      console.error('Error deleting user profile:', error.message);
+    }
+  }
+
   const profileList = () => {
-    return <DisplayMemberProfile profile={userProfile} />;
+    return <DisplayMemberProfile
+      profile={userProfile}
+      deleteProfile={deleteProfile}
+    />;
   };
 
 
@@ -55,7 +79,7 @@ export const UserProfile = () => {
         <div className="row justify-content-center">
           <div className="col-md-8">
             {profileList()}          </div>
-         
+
         </div>
       </div>
     </div>

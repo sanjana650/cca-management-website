@@ -12,6 +12,7 @@ import { AdminHome } from "./pages/AdminHome";
 import { UserProfile } from "./pages/UserProfile";
 import { MemberUpdates } from "./pages/MemberUpdates";
 import { AdminUpdates } from "./pages/AdminUpdates";
+import { EditUserProfile } from "./pages/EditUserProfile";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
 
         <Route exact path="/user-home" element={<UserHome />} />
         <Route exact path="/user-profile" element={<UserProfile />} />
+        <Route exact path="/edit-user-profile" element={<EditUserProfile />} />
         <Route exact path="/user-updates" element={<MemberUpdates />} />
 
 
