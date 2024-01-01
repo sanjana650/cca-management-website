@@ -51,7 +51,7 @@ export const AdminLogin = () => {
           // }
           alert('Error: '+response.data.error)
       } else if (!response.data.login_verified) {
-        alert("Verification OTP email sent")
+        console.log("Verification OTP email sent")
         // if login_verified is false, redirect to '/user-login-otp'
         navigate(`/user-login-otp/${form.email}`);
       } else {

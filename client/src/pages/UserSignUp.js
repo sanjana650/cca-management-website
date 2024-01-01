@@ -79,7 +79,6 @@ export const UserSignUp = () => {
       setLoading(true); // Set loading to true before making the request
 
       const response = await axios.post('http://127.0.0.1:5050/user/signup-and-send-otp', userData);
-      alert("Verification OTP email sent")
 
       if (response.data.error) {
         alert(`Error: ${response.data.error}`);

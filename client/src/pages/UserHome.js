@@ -4,10 +4,16 @@ import React from 'react';
 import Navbar from "../components/Navbar";
 import homeImage from "../images/home.png";
 import { UseRequireAuth } from '../components/RequireAuth';
-import { NavLink } from "react-router-dom";
+import { NavLink,useNavigate } from "react-router-dom";
 import './css/HomePage.css';
 
 export const UserHome = () => {
+  // const navigate = useNavigate();
+
+  // if(!localStorage.getItem('token')){
+  //   navigate("/", { replace: true });
+  // }
+
   UseRequireAuth();
 
   return (

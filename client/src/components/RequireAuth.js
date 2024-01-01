@@ -33,6 +33,12 @@ export const UseRequireAuth = () => {
       navigate("/", { replace: true });
 
     } else {
+      // Check if the token is a string
+      if (typeof storedToken !== 'string') {
+        // Handle the case when the token is not a string
+        navigate('/', { replace: true });
+        return null; // Return null to prevent further rendering
+      }
       //decode to see user role & expiry status
       const decodedToken = jwtDecode(storedToken);
       const expirationTime = decodedToken.exp * 1000; // Convert to milliseconds

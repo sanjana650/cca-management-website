@@ -35,7 +35,7 @@ const userSearchMember = async (req, res) => {
     console.log(searchResults.length);
 
     if (searchResults.length === 0) {
-      return res.status(404).json({ message: "No matching members found." });
+      return res.json({ message: "No matching members found." });
     }
 
     res.json(searchResults);

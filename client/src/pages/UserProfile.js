@@ -12,9 +12,17 @@ export const UserProfile = () => {
   const [userProfile, setUserProfile] = useState(null);
   UseRequireAuth();
 
+  let userId = ''
   const token = localStorage.getItem('token');
-  const decodedToken = jwtDecode(token);
-  const userId = decodedToken.userId;
+  if(typeof token !== 'string' || !token){
+    navigate('/', { replace: true });
+
+  }
+  else{
+    const decodedToken = jwtDecode(token);
+    userId = decodedToken.userId; 
+  }
+
 
   useEffect(() => {
     async function getProfile() {
@@ -50,8 +58,9 @@ export const UserProfile = () => {
 
       if (response.status === 200) {
         localStorage.removeItem("token");
+
         // Redirect to the home page after successful deletion
-        navigate("/", { replace: true });
+        navigate('/');
       } else {
         const message = `An error occurred: ${response.statusText}`;
         window.alert(message);

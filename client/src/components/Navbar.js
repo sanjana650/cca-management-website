@@ -13,17 +13,52 @@ import logoutImage from "../images/logout.png";
 
 export default function Navbar() {
   const navigate = useNavigate();
-  const storedToken = localStorage.getItem('token');
-  const decodedToken = jwtDecode(storedToken);
 
-  const userId = decodedToken.userId
+  // Check if the token exists in localStorage
+  const storedToken = localStorage.getItem('token');
+
+  if (!storedToken) {
+    // Handle the case when the token is not present
+    navigate("/", { replace: true });
+    return null; // Return null to prevent further rendering
+  }
+
+  // Check if the token is a string
+  if (typeof storedToken !== 'string') {
+    // Handle the case when the token is not a string
+    navigate("/", { replace: true });
+    return null; // Return null to prevent further rendering
+  }
+
+  // Decode the token
+  const decodedToken = jwtDecode(storedToken);
+  const expirationTime = decodedToken.exp * 1000;
+  const userId = decodedToken.userId;
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    //now after logging out user cannot access the home page
-    navigate("/", { replace: true });
-    LogoutUser(userId)
-  };
+    // Check if the token is expired
+    if (Date.now() > expirationTime) {
+      localStorage.removeItem("token");
+      alert("JWT Token expired. Please login again!");
+      // Token is expired, navigate to the default page
+      navigate("/", { replace: true });
+      LogoutUser(userId);
+      return null; // Return null to prevent further rendering
+    }
+  }
+
+  // const navigate = useNavigate();
+  // const storedToken = localStorage.getItem('token');
+  // const decodedToken = jwtDecode(storedToken);
+
+  // const userId = decodedToken.userId
+
+  // const handleLogout = () => {
+  //   localStorage.removeItem("token");
+  //   //now after logging out user cannot access the home page
+  //   navigate("/", { replace: true });
+  //   LogoutUser(userId)
+  // };
 
   return (
     <div >
@@ -55,7 +90,7 @@ export default function Navbar() {
                 </NavLink>
               </li>
               <li className="nav-item" style={{ padding: "0 15px", fontWeight: "bold" }}>
-                <NavLink className="nav-link" to="/user-members">
+                <NavLink className="nav-link" to="/user-view-members">
                   Members
                 </NavLink>
               </li>
