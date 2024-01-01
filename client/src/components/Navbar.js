@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { LogoutUser } from '../components/RequireAuth'
 import { jwtDecode } from 'jwt-decode';
+import { UseRequireAuth } from '../components/RequireAuth'
 
 
 import iconImage from "../images/icon.png";
@@ -12,53 +13,33 @@ import logoutImage from "../images/logout.png";
 
 
 export default function Navbar() {
-  const navigate = useNavigate();
+  UseRequireAuth()
 
-  // Check if the token exists in localStorage
+  let handleLogout = ''
+
+  const navigate = useNavigate();
   const storedToken = localStorage.getItem('token');
 
-  if (!storedToken) {
+
+
+
+  if (!storedToken || typeof storedToken !== 'string') {
     // Handle the case when the token is not present
     navigate("/", { replace: true });
     return null; // Return null to prevent further rendering
   }
-
-  // Check if the token is a string
-  if (typeof storedToken !== 'string') {
-    // Handle the case when the token is not a string
-    navigate("/", { replace: true });
-    return null; // Return null to prevent further rendering
-  }
-
-  // Decode the token
-  const decodedToken = jwtDecode(storedToken);
-  const expirationTime = decodedToken.exp * 1000;
-  const userId = decodedToken.userId;
-
-  const handleLogout = () => {
-    // Check if the token is expired
-    if (Date.now() > expirationTime) {
+  else {
+    const decodedToken = jwtDecode(storedToken);
+    const userId = decodedToken.userId
+    handleLogout = () => {
       localStorage.removeItem("token");
-      alert("JWT Token expired. Please login again!");
-      // Token is expired, navigate to the default page
+      //now after logging out user cannot access the home page
       navigate("/", { replace: true });
-      LogoutUser(userId);
-      return null; // Return null to prevent further rendering
-    }
+      LogoutUser(userId)
+    };
   }
 
-  // const navigate = useNavigate();
-  // const storedToken = localStorage.getItem('token');
-  // const decodedToken = jwtDecode(storedToken);
 
-  // const userId = decodedToken.userId
-
-  // const handleLogout = () => {
-  //   localStorage.removeItem("token");
-  //   //now after logging out user cannot access the home page
-  //   navigate("/", { replace: true });
-  //   LogoutUser(userId)
-  // };
 
   return (
     <div >

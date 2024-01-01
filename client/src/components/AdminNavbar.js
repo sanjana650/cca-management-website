@@ -37,7 +37,7 @@ const SideNavbar = () => {
 
         <ul className="nav flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
           <li className="nav-item">
-            <NavLink to="/admin-home" className="nav-link align-middle px-0 text-black font-weight-bold" style={{ fontWeight: "bold" }}>
+            <NavLink to="/admin-events" className="nav-link align-middle px-0 text-black font-weight-bold" style={{ fontWeight: "bold" }}>
               Events
             </NavLink>
           </li>

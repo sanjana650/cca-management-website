@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from "../components/Navbar";
 import axios from 'axios';
-import MemberDisplayUser from '../components/MemberDisplayUser';  // Make sure this import is correct
+import MemberDisplayUser from '../components/MemberDisplayUser';  
 import { UseRequireAuth } from '../components/RequireAuth'
 
 
@@ -48,6 +48,11 @@ export const UserMember = () => {
     }
   };
 
+  const allMembers = async () => {
+    setSearchQuery(''); //clear search query
+    getMembers();
+  }
+
 
   const membersList = () => {
     // Check if members is an array before calling map
@@ -69,7 +74,7 @@ export const UserMember = () => {
     <div>
       <Navbar />
       <br />
-      <h2 style={{ textAlign: 'center', fontWeight: 'bold', color: '#1D3C8A' }}>Updates</h2>
+      <h2 style={{ textAlign: 'center', fontWeight: 'bold', color: '#1D3C8A' }}>Members</h2>
       <div className="container mt-4">
         <div className="row justify-content-center">
           <div className="col-md-8">
@@ -90,6 +95,9 @@ export const UserMember = () => {
                 </button>
               </div>
             </div>
+            <button className="btn btn-outline-secondary" type="button" style={{marginTop:'10px'}} onClick={allMembers}>
+              All Members
+            </button>
           </div>
         </div>
       </div>

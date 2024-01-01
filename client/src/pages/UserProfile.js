@@ -41,7 +41,7 @@ export const UserProfile = () => {
           window.alert(message);
         }
       } catch (error) {
-        console.error('Error fetching user profile:', error.message);
+        console.error('Error fetching user profile as user is logged out:', error.message);
       }
     }
 
