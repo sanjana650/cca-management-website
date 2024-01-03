@@ -13,6 +13,8 @@ import { UserProfile } from "./pages/UserProfile";
 import { MemberUpdates } from "./pages/MemberUpdates";
 import { AdminUpdates } from "./pages/AdminUpdates";
 import { AdminMember } from "./pages/AdminMember";
+import { AdminViewSelectedEvent } from "./pages/AdminViewSelectedEvent";
+import { AdminEditEvent } from "./pages/AdminEditEvent";
 
 import { EditUserProfile } from "./pages/EditUserProfile";
 import { UserMember } from "./pages/UserMember";
@@ -31,6 +33,8 @@ function App() {
         <Route exact path="/admin-events" element={<AdminEvents />} />
         <Route exact path="/admin-updates" element={<AdminUpdates />} />
         <Route exact path="/admin-members" element={<AdminMember />} />
+        <Route exact path="/admin-view-selected-event/:id" element={<AdminViewSelectedEvent />} />
+        <Route exact path="/admin-edit-event/:id" element={<AdminEditEvent />} />
 
 
         <Route exact path="/user-home" element={<UserHome />} />

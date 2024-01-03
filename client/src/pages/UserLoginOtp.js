@@ -43,7 +43,7 @@ export const UserLoginOtp = () => {
           navigate('/user-home', { replace: true });
 
         } else if (userRole === 'admin') {
-          navigate('/admin-home', { replace: true });
+          navigate('/admin-events', { replace: true });
         }
       }
 

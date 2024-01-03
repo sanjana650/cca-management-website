@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
-import browserImageCompression from 'browser-image-compression'; // Rename the library import
+import browserImageCompression from 'browser-image-compression';
 import { UseRequireAuth } from '../components/RequireAuth';
 import { NavLink, useNavigate } from 'react-router-dom';
 
@@ -9,7 +9,7 @@ export const EditUserProfile = () => {
   const navigate = useNavigate();
 
   const [userProfile, setUserProfile] = useState({
-    profile_pic: '',
+    profile_pic: '', 
     email: '',
     name: '',
     age: '',
@@ -78,10 +78,10 @@ export const EditUserProfile = () => {
   const imageCompression = async (file) => {
     try {
       const options = {
-        maxSizeMB: 0.1, // Adjust the maximum size as needed
+        maxSizeMB: 0.1, 
         useWebWorker: true,
       };
-      return await browserImageCompression(file, options); // Use the library name here
+      return await browserImageCompression(file, options); 
     } catch (error) {
       console.error('Error compressing image:', error.message);
       throw error;
@@ -156,7 +156,7 @@ export const EditUserProfile = () => {
                 <div className="rounded-circle overflow-hidden mx-auto position-relative" style={{ width: '150px', height: '150px' }}>
                   {loading ? (
                     // Display a loading spinner or placeholder while processing the image
-                    <div>Loading...</div>
+                    <div>Loading image...</div>
                   ) : (
                     <img
                       src={selectedImage ? URL.createObjectURL(selectedImage) : `data:image/png;base64,${userProfile.profile_pic || ''}`}

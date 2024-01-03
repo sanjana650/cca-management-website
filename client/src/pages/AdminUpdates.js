@@ -99,7 +99,7 @@ export const AdminUpdates = () => {
         <br />
         <h2 style={{ textAlign: 'center' }}>View Updates</h2>
         <br />
-        <div className="event-content" style={{ display: 'flex', flexDirection: 'column', width: '80%' }}>
+        <div className="update-content" style={{ display: 'flex', flexDirection: 'column', width: '80%' }}>
           {updatesList()}
         </div>
         <EditUpdate isOpen={editModalOpen} onClose={closeEditModal} update={selectedUpdate} onUpdateSuccess={handleUpdateSuccess} />

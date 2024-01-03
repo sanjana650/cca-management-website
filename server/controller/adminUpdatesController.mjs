@@ -56,7 +56,7 @@ const viewAllUpdates = async (req, res) => {
   }
 }
 
-const viewSelectedUpdate = async (req, res, data) => {
+const viewSelectedUpdate = async (req, res) => {
   try {
     const view = await updatesModel.findById(req.params.id);
     res.json(view)
