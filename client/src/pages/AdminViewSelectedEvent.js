@@ -1,6 +1,5 @@
 // AdminViewSelectedEvent.js
 import React, { useEffect, useState } from 'react';
-import SideNavbar from "../components/AdminNavbar";
 import axios from 'axios';
 import { useParams, useNavigate, NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

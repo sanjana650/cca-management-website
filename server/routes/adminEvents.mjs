@@ -15,8 +15,10 @@ const upload = multer({
 const router = express.Router();
 
 //add new event
-router.post('/add-event', verifyToken, requireAdminRole, upload.single('image'), async (req, res) => {
+router.post('/add-event', verifyToken, requireAdminRole, upload.single('event_image'), async (req, res) => {
   try {
+    console.log('Request Body:', req.body);
+    console.log('Request File:', req.file);
     let { event_image, title, event_type, event_date, event_time, location, max_slots, description } = req.body;
 
     const imageBuffer = req.body.event_image;
@@ -55,6 +57,8 @@ router.post('/add-event', verifyToken, requireAdminRole, upload.single('image'),
 //edit event
 router.patch('/edit-event/:id', verifyToken, requireAdminRole, upload.single('event_image'), async (req, res) => {
   try {
+    console.log('Request Body:', req.body);
+    console.log('Request File:', req.file);
     const { title, event_type, event_date, event_time, location, max_slots, description } = req.body;
 
     // Validate other fields as needed

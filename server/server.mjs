@@ -6,13 +6,12 @@ import userRouter from './routes/user.mjs';
 // import otpRouter from './routes/otp.mjs';
 // import emailVerificationRouter from './routes/emailVerification.mjs';
 
-
 import adminUpdatesRouter from './routes/adminUpdates.mjs';
 import adminMembersRouter from './routes/adminMembers.mjs';
 import adminEventsRouter from './routes/adminEvents.mjs';
 
 import userMembersRouter from './routes/userMembers.mjs';
-// import userEventsRouter from './routes/userEvents.mjs';
+import userEventsRouter from './routes/userEvents.mjs';
 import userUpdatesRouter from './routes/userUpdates.mjs';
 
 
@@ -45,7 +44,7 @@ app.use("/admin-members", adminMembersRouter);
 app.use("/admin-events", adminEventsRouter);
 
 app.use("/user-members", userMembersRouter);
-// app.use("/userEvents", userEventsRouter);
+app.use("/user-events", userEventsRouter);
 
 
 

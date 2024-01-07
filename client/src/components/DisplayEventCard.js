@@ -17,10 +17,10 @@ const DisplayEventCard = ({ event }) => {
       cursor: "pointer",
     }}>
       <div className="row">
-        <div className="col-md-2" style={{ maxWidth: "150px",marginRight:'90px' }}>
+        <div className="col-md-2" style={{ maxWidth: "200px",marginRight:'120px' }}>
           <div
             className="overflow-hidden mx-auto"
-            style={{ width: "195px", height: "210px" }}
+            style={{ width: "255px", height: "210px" }}
           >
             <img
               src={`data:image/png;base64,${event_image}`}

@@ -2,9 +2,13 @@ import React, { useEffect, useState } from 'react';
 import SideNavbar from "../components/AdminNavbar";
 import axios from 'axios';
 import DisplayEventCard from '../components/DisplayEventCard';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { useParams, useNavigate, NavLink } from 'react-router-dom';
 
 export const AdminEvents = () => {
   const [events, setEvents] = useState([]);
+  const navigate = useNavigate();
 
 
   const getEvents = async () => {
@@ -34,6 +38,11 @@ export const AdminEvents = () => {
     ))
   }
 
+  const addEvent=()=>{
+    navigate(`/admin-add-event`)
+
+  }
+
 
   return (
     <div className="d-flex">
@@ -45,6 +54,15 @@ export const AdminEvents = () => {
           <br />
           <div className="event-content" style={{ display: 'flex', flexDirection: 'column' }}>
             {eventsList()}
+          </div>
+          {/* Floating button */}
+          <div
+            className="position-fixed bottom-0 end-0 m-4"
+            style={{ zIndex: 1000 }}
+          >
+            <button className="btn btn-primary rounded-circle btn-circle btn-lg" style={{ backgroundColor: '#22ACA7' }} onClick={() => addEvent()}>
+              <FontAwesomeIcon icon={faPlus} />
+            </button>
           </div>
         </div>
       </div>

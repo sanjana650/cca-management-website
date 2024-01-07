@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import SideNavbar from "../components/AdminNavbar";
 import axios from 'axios';
 import { useParams, useNavigate, NavLink } from 'react-router-dom';
 import browserImageCompression from 'browser-image-compression';
@@ -99,19 +98,19 @@ export const AdminEditEvent = () => {
     const maxSlotsValue = parseInt(event.max_slots, 10);
 
     try {
-      console.log(`
-    title: ${event.title},
-    event_type: ${event.event_type},
-    event_date: ${event.event_date},
-    event_time: ${event.event_time},
-    location: ${event.location},
-    max_slots: ${event.max_slots},
-    description: ${event.description}
-  `);
+  //     console.log(`
+  //   title: ${event.title},
+  //   event_type: ${event.event_type},
+  //   event_date: ${event.event_date},
+  //   event_time: ${event.event_time},
+  //   location: ${event.location},
+  //   max_slots: ${event.max_slots},
+  //   description: ${event.description}
+  // `);
 
-      console.log('Updated state:', event);
+      // console.log('Updated state:', event);
 
-      // Add the following lines to trim the values
+      //trim the values
       const trimmedEvent = Object.fromEntries(
         Object.entries(event).map(([key, value]) => [key, typeof value === 'string' ? value.trim() : value])
       );
@@ -172,7 +171,6 @@ export const AdminEditEvent = () => {
 
   return (
     <div className="d-flex position-relative">
-      <SideNavbar />
       <br />
       <div className="container">
         <div className="row justify-content-center">

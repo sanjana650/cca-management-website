@@ -9,15 +9,17 @@ import { UserSignUp } from "./pages/UserSignUp";
 import { UserSignupOtp } from "./pages/UserSignupOtp";
 import { UserSignupResendOTP } from "./pages/UserSignupResendOtp";
 import { AdminEvents } from "./pages/AdminEvents";
-import { UserProfile } from "./pages/UserProfile";
-import { MemberUpdates } from "./pages/MemberUpdates";
 import { AdminUpdates } from "./pages/AdminUpdates";
 import { AdminMember } from "./pages/AdminMember";
 import { AdminViewSelectedEvent } from "./pages/AdminViewSelectedEvent";
 import { AdminEditEvent } from "./pages/AdminEditEvent";
+import { AdminAddEvents } from "./pages/AdminCreateEvent"
 
 import { EditUserProfile } from "./pages/EditUserProfile";
 import { UserMember } from "./pages/UserMember";
+import { UserProfile } from "./pages/UserProfile";
+import { MemberUpdates } from "./pages/MemberUpdates";
+import { UserEvents } from "./pages/UserEvents";
 
 function App() {
   return (
@@ -35,6 +37,7 @@ function App() {
         <Route exact path="/admin-members" element={<AdminMember />} />
         <Route exact path="/admin-view-selected-event/:id" element={<AdminViewSelectedEvent />} />
         <Route exact path="/admin-edit-event/:id" element={<AdminEditEvent />} />
+        <Route exact path="/admin-add-event" element={<AdminAddEvents />} />
 
 
         <Route exact path="/user-home" element={<UserHome />} />
@@ -42,6 +45,7 @@ function App() {
         <Route exact path="/edit-user-profile" element={<EditUserProfile />} />
         <Route exact path="/user-updates" element={<MemberUpdates />} />
         <Route exact path="/user-view-members" element={<UserMember />} />
+        <Route exact path="/user-events" element={<UserEvents />} />
 
 
       </Routes>

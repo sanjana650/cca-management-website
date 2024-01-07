@@ -9,7 +9,7 @@ const userViewAllMembers = async (req, res) => {
     const view = await userModel.find({ role }, fieldsToDisplay);
     res.json(view)
   } catch (error) {
-    return { error: error.message};
+    return { error: error.message };
   }
 }
 
@@ -39,7 +39,7 @@ const userSearchMember = async (req, res) => {
 
     res.json(searchResults);
   } catch (error) {
-    return { error: error.message};
+    return { error: error.message };
   }
 };
 
