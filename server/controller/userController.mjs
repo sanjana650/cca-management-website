@@ -1,10 +1,11 @@
 import User from "../models/userModel.mjs";
 import OTP from "../models/otpModel.mjs";
 import { hashData, verifyHashedData } from "../utils/hashData.mjs";
-import { generateOTP, verifyOTP } from "../utils/otpUtils.mjs";
+import { generateOTP, verifyOTP, resetPasswordVerifyOTP } from "../utils/otpUtils.mjs";
 import { sendEmail } from "../utils/sendEmail.mjs";
 import jwt from 'jsonwebtoken';
 import dotenv from "dotenv";
+import bcrypt from "bcrypt";
 
 dotenv.config();
 const { AUTH_EMAIL, TOKEN_EXPIRY, TOKEN_KEY } = process.env;
@@ -361,6 +362,108 @@ const resendSignupOTP = async (data) => {
   }
 };
 
+//send otp for reset password
+const resetPasswordOTP = async (data) => {
+  try {
+    const { email } = data;
+
+    // Fetch user by email
+    const fetchedUser = await User.findOne({ email });
+
+    if (!fetchedUser) {
+      return { error: "User not found" };
+    }
+
+
+    // Find existing OTP record for the same email
+    let existingOTPRecord = await OTP.findOne({ email });
+
+    // Generate new pin
+    const generatedOTP = await generateOTP();
+
+    const subject = "Resend OTP for Sign Up";
+    const message = "Verify your OTP for sign up"
+    const duration = 30;
+
+    // Send email
+    const mailOptions = {
+      from: AUTH_EMAIL,
+      to: email,
+      subject,
+      html: `<p>${message}</p>
+    <p style="color:tomato;font-size:25px;letter-spacing:2px;"><b>${generatedOTP} </b>[Expires in ${duration} hour]</p>`,
+    };
+    await sendEmail(mailOptions);
+
+    //save or update OTP record in the database
+    const hashedOTP = await hashData(generatedOTP);
+
+    if (existingOTPRecord) {
+      //update existing OTP record
+      existingOTPRecord.otp = hashedOTP;
+      existingOTPRecord.createdAt = Date.now();
+      existingOTPRecord.expiresAt = Date.now() + 1000 * duration; // Convert seconds to milliseconds
+      await existingOTPRecord.save();
+    } else {
+      //create a new OTP record
+      const newOTP = new OTP({
+        email,
+        otp: hashedOTP,
+        createdAt: Date.now(),
+        expiresAt: Date.now() + 1000 * duration, // Convert seconds to milliseconds
+
+      });
+
+      await newOTP.save();
+    }
+
+    return { message: "Email sent" }; // Indicate successful OTP generation and sending
+  } catch (error) {
+    throw error;
+  }
+};
+
+//verify otp for reset password
+const resetPassword = async (data) => {
+  try {
+    const { otp, email, password } = data;
+    console.log('email:' + email)
+    const fetchedUser = await User.findOne({ email });
+
+    if (!fetchedUser) {
+      return { message: "User not found" };
+    }
+
+    // Verify OTP for signup
+    const otpResult = await resetPasswordVerifyOTP({ email, otp });
+
+    if (password.length < 6) {
+      return { error: 'Password must be at least 6 characters' };
+    }
+    if (await bcrypt.compare(password, fetchedUser.password)) {
+      return { error: 'Password must be different from the old password' };
+    }
+
+    if (otpResult.error) {
+      return { error: otpResult.error };
+    }
+
+    // Hash the new password
+    const hashedNewPassword = await hashData(password);
+
+    // Update the user's password only if all conditions are met
+    await User.updateOne({ email }, { password: hashedNewPassword });
+    // Delete the OTP record after successful password update
+    await OTP.deleteOne({ email });
+
+    return { message: 'Password updated successfully' };
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+
 //view profile
 const viewProfile = async (data) => {
   try {
@@ -421,4 +524,4 @@ const deleteUser = async (req, res) => {
   }
 }
 
-export { checkUserLoginCred, verifyLoginOTP, createNewUserSendOTP, verifySignupOTP, resendSignupOTP, checkAdminLoginCred, viewProfile, editProfile, deleteUser };
+export { checkUserLoginCred, verifyLoginOTP, createNewUserSendOTP, verifySignupOTP, resendSignupOTP, checkAdminLoginCred, viewProfile, editProfile, deleteUser, resetPasswordOTP, resetPassword };

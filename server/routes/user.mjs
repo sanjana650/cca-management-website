@@ -1,5 +1,5 @@
 import express from "express";
-import { checkUserLoginCred, verifyLoginOTP, createNewUserSendOTP, verifySignupOTP, resendSignupOTP, checkAdminLoginCred, viewProfile, editProfile, deleteUser } from "../controller/userController.mjs" //controller
+import { checkUserLoginCred, verifyLoginOTP, createNewUserSendOTP, verifySignupOTP, resendSignupOTP, checkAdminLoginCred, viewProfile, editProfile, deleteUser, resetPasswordOTP, resetPassword } from "../controller/userController.mjs" //controller
 import { verifyToken, requireMemberRole, requireAdminRole } from "../utils/auth.mjs";
 import User from "../models/userModel.mjs";
 
@@ -169,6 +169,36 @@ router.post('/resend-signup-otp', async (req, res) => {
   } catch (error) {
     res.status(400).send(error.message || "An error occurred");
 
+  }
+})
+
+//send otp email for reset password
+router.post('/send-otp-reset-password', async (req, res) => {
+  try {
+    let { email } = req.body;
+
+    const result = await resetPasswordOTP({ email });
+    res.status(200).json(result);
+
+  } catch (error) {
+    res.status(400).send(error.message || "An error occurred");
+
+  }
+})
+
+
+//verify otp for reset password
+router.post('/verify-otp-reset-password', async (req, res) => {
+  try {
+    let { otp, email, password } = req.body;
+    // Ensure no missing values
+    if (!(email && otp && password)) {
+      throw Error("Provide values for email and otp");
+    }
+    const result = await resetPassword({ otp, email, password });
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(400).send(error.message || "An error occurred");
   }
 })
 
