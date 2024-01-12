@@ -18,9 +18,8 @@ const editEvent = async (req, res, data) => {
   try {
     const { event_image, title, event_type, event_date, event_time, location, max_slots, description } = data;
 
-    // Assuming eventsModel is a Mongoose model
     const updated = await eventsModel.findByIdAndUpdate(req.params.id, {
-      event_image,
+      event_image, // Use req.file directly
       title,
       event_type,
       event_date,
@@ -34,19 +33,20 @@ const editEvent = async (req, res, data) => {
       return res.status(404).json({ message: "Not found" });
     }
 
-    // If there is an image file, update the event_image field
-    if (req.file) {
-      const imageBuffer = req.file.buffer.toString('base64');
+    if (event_image) {
+      const imageBuffer = event_image.buffer.toString('base64');
       updated.event_image = imageBuffer;
     }
 
-    await updated.save();  // Save the updated document
+    await updated.save();
 
     res.json({ message: "Event successfully edited", updated });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
+
 
 const viewAllEvents = async (req, res) => {
   try {

@@ -55,7 +55,7 @@ const checkUserLoginCred = async (data) => {
 
       await sendVerificationOTP(loginVerificationOptions);
 
-      return { email }; // Return email for further processing (e.g., OTP verification)
+      return { email }; 
     }
     else {
       return { error: "Only members can login" };
@@ -146,7 +146,7 @@ const sendVerificationOTP = async ({ email, subject, message, duration = 30 }) =
       to: email,
       subject,
       html: `<p>${message}</p>
-        <p style="color:tomato;font-size:25px;letter-spacing:2px;"><b>${generatedOTP} </b>[Expires in ${duration} hour]</p>`,
+        <p style="color:tomato;font-size:25px;letter-spacing:2px;"><b>${generatedOTP} </b>[Expires in ${duration} seconds]</p>`,
     };
     await sendEmail(mailOptions);
 
@@ -221,6 +221,14 @@ const verifyLoginOTP = async (data) => {
 const createNewUserSendOTP = async (data) => {
   try {
     const { profile_pic, email, name, age, diploma, about, password, role } = data;
+
+    // Trim whitespaces from input fields
+    profile_pic = profile_pic.trim();
+    email = email.trim();
+    name = name.trim();
+    diploma = diploma.trim();
+    about = about.trim();
+    password = password.trim();
 
     // Checking if user already exists
     const existingUser = await User.findOne({ email });
@@ -524,4 +532,4 @@ const deleteUser = async (req, res) => {
   }
 }
 
-export { checkUserLoginCred, verifyLoginOTP, createNewUserSendOTP, verifySignupOTP, resendSignupOTP, checkAdminLoginCred, viewProfile, editProfile, deleteUser, resetPasswordOTP, resetPassword };
+export { checkUserLoginCred, verifyLoginOTP, createNewUserSendOTP, verifySignupOTP, resendSignupOTP, checkAdminLoginCred, viewProfile, editProfile, deleteUser, resetPasswordOTP, resetPassword, sendVerificationOTP };

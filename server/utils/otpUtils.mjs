@@ -1,6 +1,6 @@
 import { verifyHashedData } from "../utils/hashData.mjs";
 import OTP from "../models/otpModel.mjs";
-import User from "../models/userModel.mjs";
+// import User from "../models/userModel.mjs";
 
 
 //generate a 4 digit otp

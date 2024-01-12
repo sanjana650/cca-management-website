@@ -94,13 +94,13 @@ router.post('/signup-and-send-otp', upload.single('image'), async (req, res) => 
     }
 
 
-    // Trim whitespaces from input fields
-    profile_pic = profile_pic.trim();
-    email = email.trim();
-    name = name.trim();
-    diploma = diploma.trim();
-    about = about.trim();
-    password = password.trim();
+    // // Trim whitespaces from input fields
+    // profile_pic = profile_pic.trim();
+    // email = email.trim();
+    // name = name.trim();
+    // diploma = diploma.trim();
+    // about = about.trim();
+    // password = password.trim();
 
     // Validate input fields
     if (!profile_pic || !email || !name || !age || !diploma || !about || !password) {

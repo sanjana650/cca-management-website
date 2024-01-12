@@ -12,7 +12,7 @@ export const UserLogin = () => {
     email: "",
     password: "",
   });
-  
+
   function updateForm(value) {
     setForm((prev) => ({ ...prev, ...value }));
   }
@@ -47,8 +47,8 @@ export const UserLogin = () => {
         //check specific error messages
         if (response.data.error) {
           // if (response.data.error === "Invalid password entered") {
-         
-          alert('Error: '+response.data.error)
+
+          alert('Error: ' + response.data.error)
         } else if (!response.data.login_verified) {
           // if login_verified is false, redirect to '/user-login-otp'
           navigate(`/user-login-otp/${form.email}`);
@@ -66,7 +66,7 @@ export const UserLogin = () => {
 
         // Check specific error messages
         if (response.data.error) {
-          alert('Error: '+response.data.error)
+          alert('Error: ' + response.data.error)
         } else if (!response.data.login_verified) {
           // if login_verified is false, redirect to '/user-login-otp'
           navigate(`/user-login-otp/${form.email}`);
@@ -85,6 +85,11 @@ export const UserLogin = () => {
     event.preventDefault();
     navigate('/user-signup');
   };
+
+  const navResetPassword = (event) => {
+    event.preventDefault();
+    navigate('/user-send-reset-password-otp');
+  }
 
   const handleToggle = () => {
     // Toggle between "Member" and "Admin" login
@@ -130,6 +135,12 @@ export const UserLogin = () => {
             <h6>
               Don't have an account? Sign Up Here!{' '}
               <Link onClick={navSignUp}>
+                Click Here!
+              </Link>
+            </h6>
+            <h6>
+              Reset Password{' '}
+              <Link onClick={navResetPassword}>
                 Click Here!
               </Link>
             </h6>

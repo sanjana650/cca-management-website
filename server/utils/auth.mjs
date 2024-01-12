@@ -8,7 +8,8 @@ const verifyToken = async (req, res, next) => {
 
   // Check if a token is provided
   if (!token) {
-    return { error: "An authentication token is required"};
+    // return { error: "An authentication token is required"};
+    throw new Error("An authentication token is required");
 
   }
 
@@ -18,8 +19,8 @@ const verifyToken = async (req, res, next) => {
 
     // Check if the token has expired
     if (decodedToken.exp < Date.now() / 1000) {
-      return { error: "Token has expired, please login again" };
-
+      // return { error: "Token has expired, please login again" };
+      throw new Error("Token has expired, please login again");
 
     }
 
@@ -30,10 +31,14 @@ const verifyToken = async (req, res, next) => {
   } catch (error) {
     // Check if the error is a TokenExpiredError
     if (error.name === 'TokenExpiredError') {
-      return { error: "Token has expired, please login again" };
+      // return { error: "Token has expired, please login again" };
+      throw new Error("Token has expired, please login again");
+
     }
 
-    return { error: "Invalid token provided, please login again to acquire a new token" };
+    // return { error: "Invalid token provided, please login again to acquire a new token" };
+    throw new Error("Invalid token provided, please login again to acquire a new token");
+
   }
 };
 
@@ -42,7 +47,8 @@ const requireMemberRole = (req, res, next) => {
   const { role } = req.currentUser;
 
   if (role !== 'member') {
-    return { error: "Permission denied. User does not have the 'member' role." };
+    // return { error: "Permission denied. User does not have the 'member' role." };
+    throw new Error("Permission denied. User does not have the 'member' role.");
 
   }
 
@@ -54,7 +60,9 @@ const requireAdminRole = (req, res, next) => {
   const { role } = req.currentUser;
 
   if (role !== 'admin') {
-    return { error: "Permission denied. User does not have the 'admin' role." };
+    // return { error: "Permission denied. User does not have the 'admin' role." };
+    throw new Error("Permission denied. User does not have the 'admin' role.");
+
   }
 
   next();

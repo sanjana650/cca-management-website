@@ -8,6 +8,9 @@ import { UserHome } from "./pages/UserHome";
 import { UserSignUp } from "./pages/UserSignUp";
 import { UserSignupOtp } from "./pages/UserSignupOtp";
 import { UserSignupResendOTP } from "./pages/UserSignupResendOtp";
+import { UserSendResetPasswordOTP } from './pages/UserSendResetPasswordOtp'
+import { UserResetPassword } from './pages/UserResetPassword'
+
 import { AdminEvents } from "./pages/AdminEvents";
 import { AdminUpdates } from "./pages/AdminUpdates";
 import { AdminMember } from "./pages/AdminMember";
@@ -31,6 +34,9 @@ function App() {
         <Route exact path="/user-signup" element={<UserSignUp />} />
         <Route path="/user-signup-otp/:email" element={<UserSignupOtp />} />
         <Route exact path="/user-resend-signup-otp" element={<UserSignupResendOTP />} />
+        <Route exact path="/user-send-reset-password-otp" element={<UserSendResetPasswordOTP />} />
+        <Route exact path="/user-reset-password/:email" element={<UserResetPassword />} />
+
 
         <Route exact path="/admin-events" element={<AdminEvents />} />
         <Route exact path="/admin-updates" element={<AdminUpdates />} />
