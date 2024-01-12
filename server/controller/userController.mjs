@@ -55,7 +55,7 @@ const checkUserLoginCred = async (data) => {
 
       await sendVerificationOTP(loginVerificationOptions);
 
-      return { email }; 
+      return { email };
     }
     else {
       return { error: "Only members can login" };
@@ -117,7 +117,7 @@ const checkAdminLoginCred = async (data) => {
 };
 
 
-//send otp email for signup & login
+//send otp email for signup & login worked before testing revert back to this if error
 const sendVerificationOTP = async ({ email, subject, message, duration = 30 }) => {
   try {
 
@@ -177,6 +177,8 @@ const sendVerificationOTP = async ({ email, subject, message, duration = 30 }) =
     throw error;
   }
 };
+
+
 
 //verify login otp & actually login user
 const verifyLoginOTP = async (data) => {
@@ -532,4 +534,4 @@ const deleteUser = async (req, res) => {
   }
 }
 
-export { checkUserLoginCred, verifyLoginOTP, createNewUserSendOTP, verifySignupOTP, resendSignupOTP, checkAdminLoginCred, viewProfile, editProfile, deleteUser, resetPasswordOTP, resetPassword, sendVerificationOTP };
+export { createToken, checkUserLoginCred, verifyLoginOTP, createNewUserSendOTP, verifySignupOTP, resendSignupOTP, checkAdminLoginCred, viewProfile, editProfile, deleteUser, resetPasswordOTP, resetPassword, sendVerificationOTP };

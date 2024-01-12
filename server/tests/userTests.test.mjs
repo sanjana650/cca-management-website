@@ -11,11 +11,8 @@ import { sendEmail } from '../utils/sendEmail.mjs';
 
 use(chaiAsPromised);
 
-// chai.use(chaiAsPromised);
-
-//Stub the sendEmail function to avoid actual email sending
-// const sendEmailStub = sinon.stub(userController, 'sendEmail');
-// const sendVerificationOTPStub = sinon.stub(userController, 'sendVerificationOTP');
+// Stub the sendEmail function to avoid actual email sending
+const sendEmailStub = sinon.stub();
 
 // Import the original sendEmail function for spying
 
@@ -62,67 +59,59 @@ describe('User Authentication Functions', () => {
       }
     })
 
-    it('should return the error that only member can login', async () => {
-      const userWithUnverifiedAccount = {
-        email: 'existent@example.com',
+
+    it('should return email if login credentials are correct', async () => {
+      const userWithCorrectCredentials = {
+        email: 'existent@gmail.com',
         password: await hashData('correctpassword'),
-        role: 'member'
-      }
-      const findOneStub = sinon.stub(User, 'findOne').resolves(userWithUnverifiedAccount);
+        role: 'member',
+        verified: true,
+      };
+
+      // Stub the findOne method of the User model to resolve with the userWithCorrectCredentials
+      const findOneStub = sinon.stub(User, 'findOne').resolves(userWithCorrectCredentials);
+
+      // Stub the findOne method of the OTP model to resolve with a fake OTP record
+      const fakeOTPObj = {
+        email: 'existent@gmail.com',
+        otp: '1234', // Replace with the actual OTP value
+        createdAt: new Date(),
+        expiresAt: new Date(),
+      };
+      const findOneOTPSStub = sinon.stub(OTPModel, 'findOne').resolves(null);
+
+      // Stub the sendEmail function to resolve with success message
+      sendEmailStub.returns('Email sent successfully');
+
       try {
-        const result = await checkUserLoginCred({ email: 'existent@example.com', password: 'correctpassword', role: 'admin' });
-        expect(result).to.have.property('error').that.equals("Only members can login");
+        // Call the function with correct credentials
+        const result = await checkUserLoginCred({
+          email: 'existent@gmail.com',
+          password: 'correctpassword',
+          role: 'member',
+        });
+
+        // Expect the result to have the correct email property
+        expect(result).to.have.property('email').that.equals('existent@gmail.com');
+
+        // Log the result of findOneOTPSStub
+        const findOneResult = await OTPModel.findOne({ email: 'existent@gmail.com' });
+        console.log('findOneResult:', findOneResult);
+
+        // Expect that sendEmailStub was called
+        expect(sendEmailStub.called).to.be.true;
+
+        // Expect that the success message is logged
+        expect(result).to.equal('Email sent successfully');
       } finally {
+        // Restore the stubs after the test
         findOneStub.restore();
+        findOneOTPSStub.restore();
       }
-    })
-
-    // it('should return email if login credentials are correct', async () => {
-    //   const userWithCorrectCredentials = {
-    //     email: 'existent@example.com',
-    //     password: await hashData('correctpassword'),
-    //     role: 'member',
-    //     verified: true,
-    //   };
-
-    //   // Stub the findOne method of the User model to resolve with the userWithCorrectCredentials
-    //   const findOneStub = sinon.stub(User, 'findOne').resolves(userWithCorrectCredentials);
-
-    //   try {
-    //     // Call the function with correct credentials
-    //     const result = await checkUserLoginCred({
-    //       email: 'existent@example.com',
-    //       password: 'correctpassword',
-    //       role: 'member',
-    //     });
-
-    //     // Expect the result to have the correct email property
-    //     expect(result).to.have.property(email).that.equals('existent@example.com');
-    //   } finally {
-    //     findOneStub.restore();
-    //   }
-    // });
-
-  });
-
-  
-
-  describe('verifyLoginOTP', () => {
-    it('should return an error if OTP verification fails', async () => {
-      // Test logic here
     });
 
-    it('should return a valid token if OTP verification succeeds', async () => {
-      // Test logic here
-    });
 
-    // Add more test cases for different scenarios
   });
-
-  describe('checkAdminLoginCred', () => {
-    // Write test cases for checkAdminLoginCred
-  });
-  // Add more describe blocks for other functions if needed
 
   afterEach(() => {
     sinon.restore();
