@@ -1,4 +1,4 @@
-import eventsModel from "../models/eventsModel.mjs";
+const { eventsModel } = require("../models/eventsModel.js")
 
 const createNewEvent = async (data) => {
   try {
@@ -80,4 +80,4 @@ const deleteEvent = async (req, res) => {
   }
 }
 
-export { createNewEvent, editEvent, viewAllEvents, viewSelectedEvent, deleteEvent };
+module.exports = { createNewEvent, editEvent, viewAllEvents, viewSelectedEvent, deleteEvent };

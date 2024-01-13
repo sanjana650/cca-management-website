@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const eventsSchema = new mongoose.Schema({
   event_image: { type: String, required: true },
@@ -11,12 +11,8 @@ const eventsSchema = new mongoose.Schema({
   count: { type: Number },
   description: { type: String, required: true },
   members_signedup: { type: Array },
-
-
 });
 
 const eventsModel = mongoose.model('events', eventsSchema);
 
-export default eventsModel;
-
-
+module.exports = eventsModel;

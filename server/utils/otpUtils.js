@@ -1,9 +1,8 @@
-import { verifyHashedData } from "../utils/hashData.mjs";
-import OTP from "../models/otpModel.mjs";
-// import User from "../models/userModel.mjs";
+const { verifyHashedData } = require("../utils/hashData.js");
+const OTP = require("../models/otpModel.js");
+// const User = require("../models/userModel.js");
 
-
-//generate a 4 digit otp
+// generate a 4 digit otp
 const generateOTP = async () => {
   try {
     const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
@@ -11,10 +10,9 @@ const generateOTP = async () => {
   } catch (error) {
     throw error;
   }
-}
+};
 
-
-//verifyOTP will use for login,signup
+// verifyOTP will be used for login, signup
 const verifyOTP = async ({ email, otp }) => {
   try {
     // Ensure no missing values
@@ -67,8 +65,7 @@ const verifyOTP = async ({ email, otp }) => {
   }
 };
 
-
-//verify reset password otp
+// verify reset password otp
 const resetPasswordVerifyOTP = async ({ email, otp }) => {
   try {
     // Ensure no missing values
@@ -107,7 +104,7 @@ const resetPasswordVerifyOTP = async ({ email, otp }) => {
 
       // If OTP is valid, delete the OTP record
       if (validOTP) {
-        //await OTP.deleteOne({ email });
+        // await OTP.deleteOne({ email });
         console.log('OTP is valid');
         return { valid: true };
       } else {
@@ -121,6 +118,4 @@ const resetPasswordVerifyOTP = async ({ email, otp }) => {
   }
 };
 
-
-
-export { generateOTP, verifyOTP, resetPasswordVerifyOTP };
+module.exports = { generateOTP, verifyOTP, resetPasswordVerifyOTP };

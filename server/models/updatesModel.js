@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const updatesSchema = new mongoose.Schema({
   content: { type: String, required: true },
@@ -7,4 +7,4 @@ const updatesSchema = new mongoose.Schema({
 
 const updatesModel = mongoose.model('updates', updatesSchema);
 
-export default updatesModel;
+module.exports = updatesModel;

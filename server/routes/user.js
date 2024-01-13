@@ -1,9 +1,8 @@
-import express from "express";
-import { checkUserLoginCred, verifyLoginOTP, createNewUserSendOTP, verifySignupOTP, resendSignupOTP, checkAdminLoginCred, viewProfile, editProfile, deleteUser, resetPasswordOTP, resetPassword } from "../controller/userController.mjs" //controller
-import { verifyToken, requireMemberRole, requireAdminRole } from "../utils/auth.mjs";
-import User from "../models/userModel.mjs";
-
-import multer from "multer";
+const express = require("express");
+const multer = require("multer");
+const { checkUserLoginCred, verifyLoginOTP, createNewUserSendOTP, verifySignupOTP, resendSignupOTP, checkAdminLoginCred, viewProfile, editProfile, deleteUser, resetPasswordOTP, resetPassword } = require("../controller/userController.js"); //controller
+const { verifyToken, requireMemberRole, requireAdminRole } = require("../utils/auth.js");
+const User = require("../models/userModel.js");
 
 const storage = multer.memoryStorage(); // Store image in memory
 const upload = multer({
@@ -15,7 +14,7 @@ const upload = multer({
 
 const router = express.Router();
 
-//check login(email & password credentials) & then send otp email
+// check login(email & password credentials) & then send otp email
 router.post('/login-and-send-otp', async (req, res) => {
   try {
     let { email, password, role } = req.body;
@@ -23,7 +22,7 @@ router.post('/login-and-send-otp', async (req, res) => {
     // Trim whitespaces from input fields
     email = email.trim();
     password = password.trim();
-    role = role.trim()
+    role = role.trim();
 
     // Validate input fields
     if (!email || !password) {
@@ -33,11 +32,10 @@ router.post('/login-and-send-otp', async (req, res) => {
     // Login, send OTP, and return email
     const result = await checkUserLoginCred({ email, password, role });
     res.status(200).json(result);
-  }
-  catch (error) {
+  } catch (error) {
     res.status(400).send(error.message);
   }
-})
+});
 
 router.post('/admin-login-and-send-otp', async (req, res) => {
   try {
@@ -46,7 +44,7 @@ router.post('/admin-login-and-send-otp', async (req, res) => {
     // Trim whitespaces from input fields
     email = email.trim();
     password = password.trim();
-    role = role.trim()
+    role = role.trim();
 
     // Validate input fields
     if (!email || !password) {
@@ -56,31 +54,28 @@ router.post('/admin-login-and-send-otp', async (req, res) => {
     // Login, send OTP, and return email
     const result = await checkAdminLoginCred({ email, password, role });
     res.status(200).json(result);
-  }
-  catch (error) {
+  } catch (error) {
     res.status(400).send(error.message);
   }
-})
+});
 
-//verify the otp for login verification
+// verify the otp for login verification
 router.post('/verify-login-otp', async (req, res) => {
   try {
     let { otp, email } = req.body;
-
 
     // Ensure no missing values
     if (!(email && otp)) {
       throw Error("Provide values for email and otp");
     }
 
-    const result = await verifyLoginOTP({ email, otp })
+    const result = await verifyLoginOTP({ email, otp });
     res.status(200).json(result);
 
   } catch (error) {
     res.status(400).send(error.message || "An error occurred");
   }
 });
-
 
 router.post('/signup-and-send-otp', upload.single('image'), async (req, res) => {
   try {
@@ -92,15 +87,6 @@ router.post('/signup-and-send-otp', upload.single('image'), async (req, res) => 
     if (!imageBuffer) {
       return res.status(400).json({ error: "No image uploaded" });
     }
-
-
-    // // Trim whitespaces from input fields
-    // profile_pic = profile_pic.trim();
-    // email = email.trim();
-    // name = name.trim();
-    // diploma = diploma.trim();
-    // about = about.trim();
-    // password = password.trim();
 
     // Validate input fields
     if (!profile_pic || !email || !name || !age || !diploma || !about || !password) {
@@ -141,8 +127,7 @@ router.post('/signup-and-send-otp', upload.single('image'), async (req, res) => 
 
 });
 
-
-//verify sign up otp and change verified status to true
+// verify sign up otp and change verified status to true
 router.post('/verify-signup-otp', async (req, res) => {
   try {
     let { otp, email } = req.body;
@@ -151,7 +136,7 @@ router.post('/verify-signup-otp', async (req, res) => {
       throw Error("Provide values for email and otp");
     }
 
-    const result = await verifySignupOTP({ email, otp })
+    const result = await verifySignupOTP({ email, otp });
     res.status(200).json(result);
 
   } catch (error) {
@@ -170,9 +155,9 @@ router.post('/resend-signup-otp', async (req, res) => {
     res.status(400).send(error.message || "An error occurred");
 
   }
-})
+});
 
-//send otp email for reset password
+// send otp email for reset password
 router.post('/send-otp-reset-password', async (req, res) => {
   try {
     let { email } = req.body;
@@ -184,10 +169,9 @@ router.post('/send-otp-reset-password', async (req, res) => {
     res.status(400).send(error.message || "An error occurred");
 
   }
-})
+});
 
-
-//verify otp for reset password
+// verify otp for reset password
 router.post('/verify-otp-reset-password', async (req, res) => {
   try {
     let { otp, email, password } = req.body;
@@ -200,8 +184,7 @@ router.post('/verify-otp-reset-password', async (req, res) => {
   } catch (error) {
     res.status(400).send(error.message || "An error occurred");
   }
-})
-
+});
 
 // View profile of the user (requires token verification and 'member' role)
 router.get('/view-profile/:id', verifyToken, requireMemberRole, async (req, res) => {
@@ -235,7 +218,7 @@ router.patch('/edit-profile/:id', verifyToken, requireMemberRole, upload.single(
   }
 });
 
-//delete profile
+// delete profile
 router.delete('/delete-profile/:id', verifyToken, requireMemberRole, async (req, res) => {
   try {
     await deleteUser(req, res);
@@ -243,9 +226,9 @@ router.delete('/delete-profile/:id', verifyToken, requireMemberRole, async (req,
     res.status(400).send(error.message);
 
   }
-})
+});
 
-//log out
+// log out
 router.post('/logout', async (req, res) => {
   try {
     const { userId } = req.body;
@@ -259,7 +242,6 @@ router.post('/logout', async (req, res) => {
     console.error('Error during logout:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
-})
+});
 
-export default router;
-
+module.exports = router;

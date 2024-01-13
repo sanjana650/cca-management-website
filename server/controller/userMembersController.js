@@ -1,4 +1,4 @@
-import userModel from "../models/userModel.mjs";
+const { userModel } = require("../models/userModel.js")
 
 const userViewAllMembers = async (req, res) => {
   try {
@@ -43,4 +43,4 @@ const userSearchMember = async (req, res) => {
   }
 };
 
-export { userViewAllMembers, userSearchMember };
+module.exports = { userViewAllMembers, userSearchMember };

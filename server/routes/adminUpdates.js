@@ -1,9 +1,7 @@
-//crud operations for updates feature
-import dayjs from "dayjs"; // import dayjs for date formatting
-import express from "express";
-import { createNewUpdate, editUpdate, deleteUpdate, viewAllUpdates, viewSelectedUpdate } from "../controller/adminUpdatesController.mjs";
-import { verifyToken, requireMemberRole, requireAdminRole } from "../utils/auth.mjs";
-
+const dayjs = require("dayjs"); // require dayjs for date formatting
+const express = require("express");
+const { createNewUpdate, editUpdate, deleteUpdate, viewAllUpdates, viewSelectedUpdate } = require("../controller/adminUpdatesController.js");
+const { verifyToken, requireMemberRole, requireAdminRole } = require("../utils/auth.js");
 
 const router = express.Router();
 
@@ -16,8 +14,8 @@ router.post('/add-updates', verifyToken, requireAdminRole, async (req, res) => {
       throw Error("Content cannot be empty");
     }
     else {
-      //function to post updates
-      //create date
+      // function to post updates
+      // create date
       const date_posted = dayjs().format("DD/MM/YY, hh:mmA");
       const createdUpdate = await createNewUpdate({
         content, date_posted
@@ -50,7 +48,7 @@ router.patch('/edit-update/:id', verifyToken, requireAdminRole, async (req, res)
     res.status(400).send(error.message);
     console.log(error);
   }
-})
+});
 
 router.delete('/delete-update/:id', verifyToken, requireAdminRole, async (req, res) => {
   try {
@@ -58,7 +56,7 @@ router.delete('/delete-update/:id', verifyToken, requireAdminRole, async (req, r
   } catch (error) {
     res.status(400).send(error.message);
   }
-})
+});
 
 router.get('/view-all-updates', verifyToken, requireAdminRole, async (req, res) => {
   try {
@@ -66,7 +64,7 @@ router.get('/view-all-updates', verifyToken, requireAdminRole, async (req, res) 
   } catch (error) {
     res.status(400).send(error.message);
   }
-})
+});
 
 router.get('/view-selected-update/:id', verifyToken, requireAdminRole, async (req, res) => {
   try {
@@ -74,6 +72,6 @@ router.get('/view-selected-update/:id', verifyToken, requireAdminRole, async (re
   } catch (error) {
     res.status(400).send(error.message);
   }
-})
+});
 
-export default router;
+module.exports = router;

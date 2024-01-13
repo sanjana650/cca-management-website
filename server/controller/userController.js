@@ -1,11 +1,12 @@
-import User from "../models/userModel.mjs";
-import OTP from "../models/otpModel.mjs";
-import { hashData, verifyHashedData } from "../utils/hashData.mjs";
-import { generateOTP, verifyOTP, resetPasswordVerifyOTP } from "../utils/otpUtils.mjs";
-import { sendEmail } from "../utils/sendEmail.mjs";
-import jwt from 'jsonwebtoken';
-import dotenv from "dotenv";
-import bcrypt from "bcrypt";
+const User = require("../models/userModel.js");
+const OTP = require("../models/otpModel.js");
+const { hashData, verifyHashedData } = require("../utils/hashData.js");
+const { generateOTP, verifyOTP, resetPasswordVerifyOTP } = require("../utils/otpUtils.js");
+const { sendEmail } = require("../utils/sendEmail.js");
+const jwt = require('jsonwebtoken');
+const dotenv = require("dotenv");
+const bcrypt = require("bcrypt");
+
 
 dotenv.config();
 const { AUTH_EMAIL, TOKEN_EXPIRY, TOKEN_KEY } = process.env;
@@ -534,4 +535,4 @@ const deleteUser = async (req, res) => {
   }
 }
 
-export { createToken, checkUserLoginCred, verifyLoginOTP, createNewUserSendOTP, verifySignupOTP, resendSignupOTP, checkAdminLoginCred, viewProfile, editProfile, deleteUser, resetPasswordOTP, resetPassword, sendVerificationOTP };
+module.exports = { createToken, checkUserLoginCred, verifyLoginOTP, createNewUserSendOTP, verifySignupOTP, resendSignupOTP, checkAdminLoginCred, viewProfile, editProfile, deleteUser, resetPasswordOTP, resetPassword, sendVerificationOTP };

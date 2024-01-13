@@ -1,4 +1,5 @@
-import userModel from "../models/userModel.mjs";
+const { userModel } = require("../models/userModel.mjs")
+
 
 const adminViewAllMembers = async (req, res) => {
   try {
@@ -66,4 +67,4 @@ const adminDeleteMember = async (req, res) => {
   }
 }
 
-export { adminViewAllMembers, adminSearchMember, adminDeleteMember };
+module.export = { adminViewAllMembers, adminSearchMember, adminDeleteMember };

@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-  profile_pic:{type:String},
+  profile_pic: { type: String },
   email: { type: String, unique: true },
   name: { type: String, required: true },
   age: { type: Number, required: true },
@@ -16,4 +16,4 @@ const userSchema = new mongoose.Schema({
 
 const UserModel = mongoose.model('users', userSchema);
 
-export default UserModel;
+module.exports = UserModel;

@@ -1,5 +1,7 @@
-import eventsModel from "../models/eventsModel.mjs";
-import userModel from "../models/userModel.mjs";
+
+const { eventsModel } = require("../models/eventsModel.js")
+const { userModel } = require("../models/userModel.js");
+
 
 const joinEvent = async (req, res) => {
   try {
@@ -129,4 +131,4 @@ const userSearchEvent = async (req, res) => {
   }
 }
 
-export { joinEvent, leaveEvent, userSearchEvent, userFilterEvent };
+module.exports = { joinEvent, leaveEvent, userSearchEvent, userFilterEvent };
