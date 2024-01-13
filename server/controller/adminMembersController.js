@@ -1,4 +1,4 @@
-const { userModel } = require("../models/userModel.mjs")
+const { userModel } = require("../models/userModel.js")
 
 
 const adminViewAllMembers = async (req, res) => {

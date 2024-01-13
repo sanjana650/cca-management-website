@@ -1,6 +1,7 @@
 const express = require("express");
 const { adminViewAllMembers, adminSearchMember, adminDeleteMember } = require("../controller/adminMembersController.js");
 const { verifyToken, requireMemberRole, requireAdminRole } = require("../utils/auth.js");
+const { userModel } = require("../models/userModel.js")
 
 const router = express.Router();
 

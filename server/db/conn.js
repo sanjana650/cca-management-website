@@ -1,11 +1,8 @@
-//connect using mongoose instead of mongoDB client as shown in lab
-import mongoose from 'mongoose';
-
+const mongoose = require('mongoose');
 
 const connectToDb = async () => {
   try {
     await mongoose.connect('mongodb://127.0.0.1:27017/cca-management-project', {
-      
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
@@ -16,4 +13,4 @@ const connectToDb = async () => {
   }
 };
 
-export default connectToDb;
+module.exports = connectToDb;
