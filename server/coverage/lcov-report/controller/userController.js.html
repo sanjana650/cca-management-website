@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">35% </span>
+                <span class="strong">42.27% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>77/220</span>
+                <span class='fraction'>93/220</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">51.31% </span>
+                <span class="strong">56.57% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>39/76</span>
+                <span class='fraction'>43/76</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">23.07% </span>
+                <span class="strong">38.46% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>3/13</span>
+                <span class='fraction'>5/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">35% </span>
+                <span class="strong">42.27% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>77/220</span>
+                <span class='fraction'>93/220</span>
             </div>
         
             
@@ -627,11 +627,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -804,38 +804,38 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1173,12 +1173,12 @@ const { AUTH_EMAIL, TOKEN_EXPIRY, TOKEN_KEY } = process.env;
 //LOGIN
 &nbsp;
 //create a JWT token
-const createToken = <span class="fstat-no" title="function not covered" >(d</span>ata) =&gt; {
-  const secretKey = <span class="cstat-no" title="statement not covered" >TOKEN_KEY;</span>
+const createToken = (data) =&gt; {
+  const secretKey = TOKEN_KEY;
 &nbsp;
   // Create the token with an expiration time 
-  const token = <span class="cstat-no" title="statement not covered" >jwt.sign(data, secretKey, { expiresIn: TOKEN_EXPIRY });</span>
-<span class="cstat-no" title="statement not covered" >  return token;</span>
+  const token = jwt.sign(data, secretKey, { expiresIn: TOKEN_EXPIRY });
+  return token;
 };
 &nbsp;
 //function that checks if credentials are valid and then calls the function to verify if otp is correct
@@ -1350,39 +1350,39 @@ const sendVerificationOTP = async ({ email, subject, message, duration = 30 }) =
 &nbsp;
 &nbsp;
 //verify login otp &amp; actually login user
-const verifyLoginOTP = <span class="fstat-no" title="function not covered" >as</span>ync (data) =&gt; {
-<span class="cstat-no" title="statement not covered" >  try {</span>
-    const { email, otp } = <span class="cstat-no" title="statement not covered" >data;</span>
+const verifyLoginOTP = async (data) =&gt; {
+  try {
+    const { email, otp } = data;
 &nbsp;
     // Fetch user by email
-    const fetchedUser = <span class="cstat-no" title="statement not covered" >await User.findOne({ email });</span>
+    const fetchedUser = await User.findOne({ email });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (!fetchedUser) {</span>
-<span class="cstat-no" title="statement not covered" >      return { error: "User not found" };</span>
+    if (!fetchedUser) {
+      return { error: "User not found" };
     }
 &nbsp;
     //verify OTP for login
-    const otpResult = <span class="cstat-no" title="statement not covered" >await verifyOTP({ email, otp });</span>
+    const otpResult = await verifyOTP({ email, otp });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (otpResult.error) {</span>
+    if (otpResult.error) {
       //handle the error from verifyOTP
-<span class="cstat-no" title="statement not covered" >      return { error: otpResult.error };</span>
+      return { error: otpResult.error };
     }
 &nbsp;
     // OTP verification succeeded, update login_verified status
-<span class="cstat-no" title="statement not covered" >    fetchedUser.login_verified = true;</span>
-<span class="cstat-no" title="statement not covered" >    await fetchedUser.save();</span>
+    fetchedUser.login_verified = true;
+    await fetchedUser.save();
 &nbsp;
 &nbsp;
     // create a new token if password matches 
-    const tokenData = <span class="cstat-no" title="statement not covered" >{</span>
+    const tokenData = {
       userId: fetchedUser._id,
       email: fetchedUser.email,
       role: fetchedUser.role,
     };
-    const token = <span class="cstat-no" title="statement not covered" >await createToken(tokenData);</span>
+    const token = await createToken(tokenData);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return { token }; </span>// Return the result here
+    return { token }; 
   } catch (error) {
 <span class="cstat-no" title="statement not covered" >    throw error;</span>
   }
@@ -1711,7 +1711,7 @@ module.exports = { createToken, checkUserLoginCred, verifyLoginOTP, createNewUse
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-01-13T15:38:13.765Z
+                at 2024-01-13T16:38:09.810Z
             </div>
         <script src="../prettify.js"></script>
         <script>

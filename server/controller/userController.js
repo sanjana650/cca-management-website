@@ -223,7 +223,7 @@ const verifyLoginOTP = async (data) => {
     };
     const token = await createToken(tokenData);
 
-    return { token }; // Return the result here
+    return { token }; 
   } catch (error) {
     throw error;
   }
