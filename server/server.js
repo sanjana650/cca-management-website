@@ -1,18 +1,18 @@
-import express from "express";
-import cors from "cors";
+const express = require("express");
+const cors = require("cors");
 
-import connectToDb from './db/conn.mjs'; // Imports the function responsible for connecting to the MongoDB database.
-import userRouter from './routes/user.mjs';
-// import otpRouter from './routes/otp.mjs';
-// import emailVerificationRouter from './routes/emailVerification.mjs';
+const connectToDb = require('./db/conn.js');
+const userRouter = require('./routes/user.js');
+// const otpRouter = require('./routes/otp.js');
+// const emailVerificationRouter = require('./routes/emailVerification.js');
 
-import adminUpdatesRouter from './routes/adminUpdates.mjs';
-import adminMembersRouter from './routes/adminMembers.mjs';
-import adminEventsRouter from './routes/adminEvents.mjs';
+const adminUpdatesRouter = require('./routes/adminUpdates.js');
+const adminMembersRouter = require('./routes/adminMembers.js');
+const adminEventsRouter = require('./routes/adminEvents.js');
 
-import userMembersRouter from './routes/userMembers.mjs';
-import userEventsRouter from './routes/userEvents.mjs';
-import userUpdatesRouter from './routes/userUpdates.mjs';
+const userMembersRouter = require('./routes/userMembers.js');
+const userEventsRouter = require('./routes/userEvents.js');
+const userUpdatesRouter = require('./routes/userUpdates.js');
 
 
 const PORT = process.env.PORT || 5050;
@@ -20,7 +20,7 @@ const app = express();
 
 
 
-import dotenv from 'dotenv';
+const dotenv = require('dotenv');
 
 dotenv.config();
 

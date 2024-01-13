@@ -2,12 +2,13 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node server.mjs",
+    "start": "nodemon server.js",
     "test": "mocha -r esm tests/*.test.mjs --timeout 100000",
-    "dev": "nodemon server.mjs"
+    "dev": "nodemon server.js"
   },
+  
   "keywords": [],
   "author": "",
   "license": "ISC",
