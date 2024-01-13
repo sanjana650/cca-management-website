@@ -1,6 +1,7 @@
-import updatesModel from "../models/updatesModel.mjs";
+const { updatesModel } = require("../models/updatesModel.js")
 
-export const viewUpdates = async (req, res) => {
+
+const viewUpdates = async (req, res) => {
   try {
     const view = await updatesModel.find();
     res.json(view)
@@ -8,3 +9,5 @@ export const viewUpdates = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 }
+
+module.exports = { viewUpdates };

@@ -35,6 +35,8 @@ connectToDb();
 
 app.use("/user", userRouter);
 app.use("/user-updates", userUpdatesRouter);
+app.use("/user-members", userMembersRouter);
+app.use("/user-events", userEventsRouter);
 // app.use("/otp", otpRouter);
 // app.use("/emailVerification", emailVerificationRouter);
 
@@ -43,8 +45,7 @@ app.use("/admin-updates", adminUpdatesRouter);
 app.use("/admin-members", adminMembersRouter);
 app.use("/admin-events", adminEventsRouter);
 
-app.use("/user-members", userMembersRouter);
-app.use("/user-events", userEventsRouter);
+
 
 
 
@@ -55,3 +56,5 @@ app.get("/", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port: http://localhost:${PORT}`);
 });
+
+

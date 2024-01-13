@@ -1,4 +1,4 @@
-import updatesModel from "../models/updatesModel.mjs";
+const { updatesModel } = require("../models/updatesModel.js")
 
 const createNewUpdate = async (data) => {
   try {
@@ -66,4 +66,4 @@ const viewSelectedUpdate = async (req, res) => {
   }
 }
 
-export { createNewUpdate, editUpdate, deleteUpdate, viewAllUpdates,viewSelectedUpdate };
+module.exports = { createNewUpdate, editUpdate, deleteUpdate, viewAllUpdates, viewSelectedUpdate };

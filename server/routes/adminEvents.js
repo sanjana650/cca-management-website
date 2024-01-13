@@ -1,9 +1,8 @@
-//admin side crud operations for events 
-import express from "express";
-import { createNewEvent, editEvent, viewAllEvents, viewSelectedEvent, deleteEvent } from "../controller/adminEventsController.mjs";
-import { verifyToken, requireMemberRole, requireAdminRole } from "../utils/auth.mjs";
-import multer from "multer";
-import eventsModel from "../models/eventsModel.mjs";
+const express = require("express");
+const { createNewEvent, editEvent, viewAllEvents, viewSelectedEvent, deleteEvent } = require("../controller/adminEventsController.js");
+const { verifyToken, requireMemberRole, requireAdminRole } = require("../utils/auth.js");
+const multer = require("multer");
+const eventsModel = require("../models/eventsModel.js");
 
 const storage = multer.memoryStorage(); // Store image in memory
 const upload = multer({
@@ -14,7 +13,7 @@ const upload = multer({
 });
 const router = express.Router();
 
-//add new event
+// Add new event
 router.post('/add-event', verifyToken, requireAdminRole, upload.single('event_image'), async (req, res) => {
   try {
     console.log('Request Body:', req.body);
@@ -34,7 +33,7 @@ router.post('/add-event', verifyToken, requireAdminRole, upload.single('event_im
     if (event_image === "" || title === "" || event_type === "" || event_date === "" || event_time == "" || location === "" || max_slots === "" || description === "") {
       throw new Error("Fields cannot be empty");
     } else {
-      // Function to add event
+      // Function to add an event
       console.log('event Date:', event_date);
       console.log('event Time:', event_time);
       const count = 0;
@@ -47,14 +46,13 @@ router.post('/add-event', verifyToken, requireAdminRole, upload.single('event_im
         message: "Event successfully posted",
         data: createdEvent
       });
-
     }
   } catch (error) {
     res.status(400).send(error.message);
   }
 });
 
-//edit event
+// Edit event
 router.patch('/edit-event/:id', verifyToken, requireAdminRole, upload.single('event_image'), async (req, res) => {
   try {
     console.log('Request Body:', req.body);
@@ -90,39 +88,37 @@ router.patch('/edit-event/:id', verifyToken, requireAdminRole, upload.single('ev
     await updated.save();  // Save the updated document
 
     res.json({ message: "Event successfully edited", updated });
+    
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-
-//view event
+// View all events
 router.get('/view-all-events', verifyToken, requireAdminRole, async (req, res) => {
   try {
     await viewAllEvents(req, res);
   } catch (error) {
     res.status(400).send(error.message);
   }
-})
+});
 
-//view selected event
+// View selected event
 router.get('/view-event/:id', verifyToken, requireAdminRole, async (req, res) => {
   try {
     await viewSelectedEvent(req, res);
   } catch (error) {
     res.status(400).send(error.message);
   }
-})
+});
 
-
-//delete event
+// Delete event
 router.delete('/delete-event/:id', async (req, res) => {
   try {
     await deleteEvent(req, res);
   } catch (error) {
     res.status(400).send(error.message);
-
   }
-})
+});
 
-export default router;
+module.exports = router;

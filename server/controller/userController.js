@@ -1,11 +1,12 @@
-import User from "../models/userModel.mjs";
-import OTP from "../models/otpModel.mjs";
-import { hashData, verifyHashedData } from "../utils/hashData.mjs";
-import { generateOTP, verifyOTP, resetPasswordVerifyOTP } from "../utils/otpUtils.mjs";
-import { sendEmail } from "../utils/sendEmail.mjs";
-import jwt from 'jsonwebtoken';
-import dotenv from "dotenv";
-import bcrypt from "bcrypt";
+const User = require("../models/userModel.js");
+const OTP = require("../models/otpModel.js");
+const { hashData, verifyHashedData } = require("../utils/hashData.js");
+const { generateOTP, verifyOTP, resetPasswordVerifyOTP } = require("../utils/otpUtils.js");
+const { sendEmail } = require("../utils/sendEmail.js");
+const jwt = require('jsonwebtoken');
+const dotenv = require("dotenv");
+const bcrypt = require("bcrypt");
+
 
 dotenv.config();
 const { AUTH_EMAIL, TOKEN_EXPIRY, TOKEN_KEY } = process.env;
@@ -55,7 +56,7 @@ const checkUserLoginCred = async (data) => {
 
       await sendVerificationOTP(loginVerificationOptions);
 
-      return { email }; // Return email for further processing (e.g., OTP verification)
+      return { email };
     }
     else {
       return { error: "Only members can login" };
@@ -117,7 +118,7 @@ const checkAdminLoginCred = async (data) => {
 };
 
 
-//send otp email for signup & login
+//send otp email for signup & login worked before testing revert back to this if error
 const sendVerificationOTP = async ({ email, subject, message, duration = 30 }) => {
   try {
 
@@ -146,7 +147,7 @@ const sendVerificationOTP = async ({ email, subject, message, duration = 30 }) =
       to: email,
       subject,
       html: `<p>${message}</p>
-        <p style="color:tomato;font-size:25px;letter-spacing:2px;"><b>${generatedOTP} </b>[Expires in ${duration} hour]</p>`,
+        <p style="color:tomato;font-size:25px;letter-spacing:2px;"><b>${generatedOTP} </b>[Expires in ${duration} seconds]</p>`,
     };
     await sendEmail(mailOptions);
 
@@ -177,6 +178,8 @@ const sendVerificationOTP = async ({ email, subject, message, duration = 30 }) =
     throw error;
   }
 };
+
+
 
 //verify login otp & actually login user
 const verifyLoginOTP = async (data) => {
@@ -221,6 +224,14 @@ const verifyLoginOTP = async (data) => {
 const createNewUserSendOTP = async (data) => {
   try {
     const { profile_pic, email, name, age, diploma, about, password, role } = data;
+
+    // Trim whitespaces from input fields
+    profile_pic = profile_pic.trim();
+    email = email.trim();
+    name = name.trim();
+    diploma = diploma.trim();
+    about = about.trim();
+    password = password.trim();
 
     // Checking if user already exists
     const existingUser = await User.findOne({ email });
@@ -524,4 +535,4 @@ const deleteUser = async (req, res) => {
   }
 }
 
-export { checkUserLoginCred, verifyLoginOTP, createNewUserSendOTP, verifySignupOTP, resendSignupOTP, checkAdminLoginCred, viewProfile, editProfile, deleteUser, resetPasswordOTP, resetPassword };
+module.exports = { createToken, checkUserLoginCred, verifyLoginOTP, createNewUserSendOTP, verifySignupOTP, resendSignupOTP, checkAdminLoginCred, viewProfile, editProfile, deleteUser, resetPasswordOTP, resetPassword, sendVerificationOTP };

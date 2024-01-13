@@ -73,7 +73,7 @@ export const UserEvents = () => {
         },
       });
       updateEventCount(event_id, response.data.count);
-
+      alert(`Successfully joined an event`)
     } catch (error) {
       console.error(error.message);
     }
@@ -87,6 +87,7 @@ export const UserEvents = () => {
         },
       });
       updateEventCount(event_id, response.data.count);
+      alert(`Successfully left an event`)
 
     } catch (error) {
       console.error(error.message);

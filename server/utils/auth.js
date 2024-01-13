@@ -1,6 +1,4 @@
-// auth.mjs
-
-import jwt from 'jsonwebtoken';
+const jwt = require('jsonwebtoken');
 
 const verifyToken = async (req, res, next) => {
   const tokenKey = process.env.TOKEN_KEY;
@@ -8,8 +6,7 @@ const verifyToken = async (req, res, next) => {
 
   // Check if a token is provided
   if (!token) {
-    return { error: "An authentication token is required"};
-
+    throw new Error("An authentication token is required");
   }
 
   // Verify the token
@@ -18,9 +15,7 @@ const verifyToken = async (req, res, next) => {
 
     // Check if the token has expired
     if (decodedToken.exp < Date.now() / 1000) {
-      return { error: "Token has expired, please login again" };
-
-
+      throw new Error("Token has expired, please login again");
     }
 
     // Attach the decoded token to the request
@@ -30,10 +25,10 @@ const verifyToken = async (req, res, next) => {
   } catch (error) {
     // Check if the error is a TokenExpiredError
     if (error.name === 'TokenExpiredError') {
-      return { error: "Token has expired, please login again" };
+      throw new Error("Token has expired, please login again");
     }
 
-    return { error: "Invalid token provided, please login again to acquire a new token" };
+    throw new Error("Invalid token provided, please login again to acquire a new token");
   }
 };
 
@@ -42,8 +37,7 @@ const requireMemberRole = (req, res, next) => {
   const { role } = req.currentUser;
 
   if (role !== 'member') {
-    return { error: "Permission denied. User does not have the 'member' role." };
-
+    throw new Error("Permission denied. User does not have the 'member' role.");
   }
 
   next();
@@ -54,12 +48,10 @@ const requireAdminRole = (req, res, next) => {
   const { role } = req.currentUser;
 
   if (role !== 'admin') {
-    return { error: "Permission denied. User does not have the 'admin' role." };
+    throw new Error("Permission denied. User does not have the 'admin' role.");
   }
 
   next();
 };
 
-export { verifyToken, requireMemberRole, requireAdminRole };
-
-
+module.exports = { verifyToken, requireMemberRole, requireAdminRole };
