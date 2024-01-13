@@ -34,6 +34,11 @@ const checkUserLoginCred = async (data) => {
       return { error: "Email not found" };
     }
 
+    // Check for missing or incorrect parameters before proceeding
+    if (!password || !role || !email) {
+      return { error: "Missing or incorrect data parameters" };
+    }
+
     const hashedPassword = fetchedUser.password;
     const passwordMatch = await verifyHashedData(password, hashedPassword);
 
@@ -79,6 +84,11 @@ const checkAdminLoginCred = async (data) => {
       return { error: "Email not found" };
     }
 
+    // Check for missing or incorrect parameters before proceeding
+    if (!password || !role || !email) {
+      return { error: "Missing or incorrect data parameters" };
+    }
+
     if (role == 'admin' && fetchedUser.role == 'admin') {
       // Fetch user by email
       const fetchedUser = await User.findOne({ email });
@@ -122,17 +132,16 @@ const checkAdminLoginCred = async (data) => {
 const sendVerificationOTP = async ({ email, subject, message, duration = 30 }) => {
   try {
 
+    // Ensure no missing values
+    if (!(email || subject || message)) {
+      return { error: "Provide values for email, subject, and message" };
+    }
+
     // Fetch user by email
     const fetchedUser = await User.findOne({ email });
 
     if (!fetchedUser) {
       return { error: "User not found" };
-    }
-
-    // Ensure no missing values
-    if (!(email && subject && message)) {
-      return { error: "Provide values for email, subject, and message" };
-
     }
 
     // Find existing OTP record for the same email

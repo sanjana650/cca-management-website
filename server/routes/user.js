@@ -20,9 +20,9 @@ router.post('/login-and-send-otp', async (req, res) => {
     let { email, password, role } = req.body;
 
     // Trim whitespaces from input fields
-    email = email.trim();
-    password = password.trim();
-    role = role.trim();
+    // email = email.trim();
+    // password = password.trim();
+    // role = role.trim();
 
     // Validate input fields
     if (!email || !password) {
@@ -42,9 +42,9 @@ router.post('/admin-login-and-send-otp', async (req, res) => {
     let { email, password, role } = req.body;
 
     // Trim whitespaces from input fields
-    email = email.trim();
-    password = password.trim();
-    role = role.trim();
+    // email = email.trim();
+    // password = password.trim();
+    // role = role.trim();
 
     // Validate input fields
     if (!email || !password) {
