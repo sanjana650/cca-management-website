@@ -23,13 +23,13 @@ export const UserSignUp = () => {
     setForm((prev) => ({ ...prev, ...value }));
   }
 
-  //handle image selection and convert to base64 URL
+  // Handle image selection and convert to base64 URL
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
       try {
         const compressedImage = await imageCompression(file, {
-          quality: 0.6, //quality of img
+          quality: 0.6, // Quality of img
         });
 
         const reader = new FileReader();
@@ -61,8 +61,7 @@ export const UserSignUp = () => {
       return;
     }
 
-
-    //Convert the base64-encoded image to a data URL
+    // Convert the base64-encoded image to a data URL
     const imageDataUrl = selectedImage ? selectedImage.split(",")[1] : null;
 
     const userData = {
@@ -97,7 +96,6 @@ export const UserSignUp = () => {
       setLoading(false); // Set loading back to false after the request is complete
     }
   }
-
 
   const sendOtp = (event) => {
     event.preventDefault();
@@ -137,7 +135,7 @@ export const UserSignUp = () => {
                 />
               ) : (
                 <img
-                  src="https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg"  //placeholder image
+                  src="https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg"  // Placeholder image
                   alt="Placeholder"
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
@@ -152,9 +150,8 @@ export const UserSignUp = () => {
           </button>
         </div>
 
-
         {/* Form Section */}
-        <form onSubmit={onSubmit}>
+        <form role="form" onSubmit={onSubmit}>
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <input

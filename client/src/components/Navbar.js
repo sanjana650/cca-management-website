@@ -80,11 +80,7 @@ export default function Navbar() {
                   Updates
                 </NavLink>
               </li>
-              <li className="nav-item" style={{ padding: "0 15px", fontWeight: "bold" }}>
-                <NavLink className="nav-link" to="/user-contact">
-                  Contact Us
-                </NavLink>
-              </li>
+
             </ul>
 
             <ul className="navbar-nav">
