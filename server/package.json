@@ -5,12 +5,13 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js",
-    "test": " jest tests/*.test.js",
+    "test": " jest",
     "dev": "nodemon server.js"
   },
   "nyc": {
     "include": [
-      "controller/userController.js"
+      "controller/userController.js",
+      "routes/user.js"
     ],
     "exclude": [],
     "reporter": [

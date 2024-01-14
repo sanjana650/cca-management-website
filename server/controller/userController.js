@@ -477,7 +477,7 @@ const resetPasswordOTP = async (data) => {
 const resetPassword = async (data) => {
   try {
     const { otp, email, password } = data;
-    console.log('email:' + email)
+    // console.log('email:' + email)
     const fetchedUser = await User.findOne({ email });
 
     if (!fetchedUser) {

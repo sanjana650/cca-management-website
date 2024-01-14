@@ -21,6 +21,8 @@ afterAll(async () => {
   await dropDatabase();
 });
 
+
+
 //Mock the sendEmail function to spy if this function is getting called during testing
 jest.mock('../utils/sendEmail', () => ({
   sendEmail: jest.fn(),
@@ -1537,7 +1539,6 @@ describe('deleteUser', () => {
 
     // Fetch the user's ID
     const userId = createdUser._id.toString();
-    console.log(userId)
     // Attempt to delete the user profile
     const result = await deleteUser({ params: { id: userId } });
 
@@ -1582,3 +1583,6 @@ describe('deleteUser', () => {
   });
 
 })
+
+
+
