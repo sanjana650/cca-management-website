@@ -568,21 +568,6 @@ const editProfile = async (data) => {
   }
 };
 
-//delete profile
-// const deleteUser = async (req, res) => {
-//   try {
-//     const deleted = await User.findByIdAndDelete(req.params.id, { new: true });
-
-//     if (!deleted) {
-//       return { error: "User not found" };
-//     }
-
-//     res.json({ message: "User deleted successfully" });
-//     return deleted;
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// }
 
 // delete profile
 const deleteUser = async (req, res) => {
