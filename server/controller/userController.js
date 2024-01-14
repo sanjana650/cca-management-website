@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const dotenv = require("dotenv");
 const bcrypt = require("bcrypt");
 const mongoose = require('mongoose');
-const { eventsModel } = require("../models/eventsModel.js")
+const  eventsModel  = require("../models/eventsModel.js")
 
 
 dotenv.config();

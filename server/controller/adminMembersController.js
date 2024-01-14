@@ -1,4 +1,4 @@
-const { userModel } = require("../models/userModel.js")
+const userModel = require("../models/userModel.js")
 
 
 const adminViewAllMembers = async (req, res) => {
@@ -67,4 +67,4 @@ const adminDeleteMember = async (req, res) => {
   }
 }
 
-module.export = { adminViewAllMembers, adminSearchMember, adminDeleteMember };
+module.exports = { adminViewAllMembers, adminSearchMember, adminDeleteMember };

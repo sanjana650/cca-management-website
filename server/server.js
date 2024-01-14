@@ -18,8 +18,6 @@ const userUpdatesRouter = require('./routes/userUpdates.js');
 const PORT = process.env.PORT || 5050;
 const app = express();
 
-
-
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -44,9 +42,6 @@ app.use("/user-events", userEventsRouter);
 app.use("/admin-updates", adminUpdatesRouter);
 app.use("/admin-members", adminMembersRouter);
 app.use("/admin-events", adminEventsRouter);
-
-
-
 
 
 app.get("/", async (req, res) => {

@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js",
-    "test": "nyc jest --coverage",
+    "test": " jest tests/*.test.js",
     "dev": "nodemon server.js"
   },
   "nyc": {

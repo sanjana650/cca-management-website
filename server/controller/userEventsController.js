@@ -1,6 +1,6 @@
 
-const { eventsModel } = require("../models/eventsModel.js")
-const { userModel } = require("../models/userModel.js");
+const  eventsModel  = require("../models/eventsModel.js")
+const  userModel  = require("../models/userModel.js");
 
 
 const joinEvent = async (req, res) => {

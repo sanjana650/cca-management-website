@@ -1,4 +1,4 @@
-const { updatesModel } = require("../models/updatesModel.js")
+const  updatesModel  = require("../models/updatesModel.js")
 
 
 const viewUpdates = async (req, res) => {

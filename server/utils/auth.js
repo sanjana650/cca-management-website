@@ -15,7 +15,9 @@ const verifyToken = async (req, res, next) => {
 
     // Check if the token has expired
     if (decodedToken.exp < Date.now() / 1000) {
-      throw new Error("Token has expired, please login again");
+      // throw new Error("Token has expired, please login again");
+      return res.status(401).json({ error: "Token has expired, please login again" });
+
     }
 
     // Attach the decoded token to the request
@@ -25,10 +27,10 @@ const verifyToken = async (req, res, next) => {
   } catch (error) {
     // Check if the error is a TokenExpiredError
     if (error.name === 'TokenExpiredError') {
-      throw new Error("Token has expired, please login again");
+      return res.status(401).json({ error: "Token has expired, please login again" });
     }
 
-    throw new Error("Invalid token provided, please login again to acquire a new token");
+    return res.status(401).json({ error: "Invalid token provided, please login again to acquire a new token" });
   }
 };
 
