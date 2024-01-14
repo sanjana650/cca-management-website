@@ -37,7 +37,7 @@ const verifyOTP = async ({ email, otp }) => {
     const { expiresAt } = matchedOTPRecord;
     // Calculate the time difference in seconds
     const timeDifferenceInSeconds = Math.floor((new Date(expiresAt) - Date.now()) / 1000);
-    console.log(timeDifferenceInSeconds);
+    // console.log(timeDifferenceInSeconds);
 
     // Check if OTP is expired (30 seconds duration)
     if (timeDifferenceInSeconds < 0 || timeDifferenceInSeconds > 30) {
@@ -52,10 +52,10 @@ const verifyOTP = async ({ email, otp }) => {
       // If OTP is valid, delete the OTP record
       if (validOTP) {
         await OTP.deleteOne({ email });
-        console.log('line 60: OTP is valid'); // Log the result before returning
+        // console.log('line 60: OTP is valid'); // Log the result before returning
         return { valid: true };
       } else {
-        console.log('line 60: OTP is invalid'); // Log the result before returning
+        // console.log('line 60: OTP is invalid'); // Log the result before returning
         return { valid: false, error: "Invalid OTP" };
       }
     }
