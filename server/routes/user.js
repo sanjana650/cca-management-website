@@ -89,21 +89,21 @@ router.post('/signup-and-send-otp', upload.single('image'), async (req, res) => 
     }
 
     // Validate input fields
-    if (!profile_pic || !email || !name || !age || !diploma || !about || !password) {
-      return res.status(400).json({ error: "Empty input fields" });
-    }
+    // if (!profile_pic || !email || !name || !age || !diploma || !about || !password) {
+    //   return res.status(400).json({ error: "Empty input fields" });
+    // }
 
-    if (!/^[a-zA-Z0-9 ]*$/.test(name)) {
-      return res.status(400).json({ error: "Invalid name entered" });
-    }
+    // if (!/^[a-zA-Z0-9 ]*$/.test(name)) {
+    //   return res.status(400).json({ error: "Invalid name entered" });
+    // }
 
-    if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-      return res.status(400).json({ error: "Invalid email entered" });
-    }
+    // if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+    //   return res.status(400).json({ error: "Invalid email entered" });
+    // }
 
-    if (password.length < 6) {
-      return res.status(400).json({ error: "Password is too short" });
-    }
+    // if (password.length < 6) {
+    //   return res.status(400).json({ error: "Password is too short" });
+    // }
 
     // Create user and send verification email
     const role = "member";
@@ -202,7 +202,7 @@ router.get('/view-profile/:id', verifyToken, requireMemberRole, async (req, res)
 router.patch('/edit-profile/:id', verifyToken, requireMemberRole, upload.single('profile_pic'), async (req, res) => {
   try {
     let { id } = req.params;
-    let { name, age, diploma, about, password } = req.body;
+    let { name, age, diploma, about } = req.body;
 
     // Check if a file was uploaded
     let profile_pic;
@@ -211,7 +211,7 @@ router.patch('/edit-profile/:id', verifyToken, requireMemberRole, upload.single(
       profile_pic = req.file.buffer.toString('base64');
     }
 
-    let updatedProfile = await editProfile({ id, profile_pic, name, age, diploma, about, password });
+    let updatedProfile = await editProfile({ id, profile_pic, name, age, diploma, about });
     res.json(updatedProfile);
   } catch (error) {
     res.status(500).send(error.message);

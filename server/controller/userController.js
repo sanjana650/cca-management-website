@@ -6,6 +6,8 @@ const { sendEmail } = require("../utils/sendEmail.js");
 const jwt = require('jsonwebtoken');
 const dotenv = require("dotenv");
 const bcrypt = require("bcrypt");
+const mongoose = require('mongoose');
+const { eventsModel } = require("../models/eventsModel.js")
 
 
 dotenv.config();
@@ -223,7 +225,7 @@ const verifyLoginOTP = async (data) => {
     };
     const token = await createToken(tokenData);
 
-    return { token }; 
+    return { token };
   } catch (error) {
     throw error;
   }
@@ -232,7 +234,7 @@ const verifyLoginOTP = async (data) => {
 // Sign up and send verification OTP email
 const createNewUserSendOTP = async (data) => {
   try {
-    const { profile_pic, email, name, age, diploma, about, password, role } = data;
+    let { profile_pic, email, name, age, diploma, about, password, role } = data;
 
     // Trim whitespaces from input fields
     profile_pic = profile_pic.trim();
@@ -242,12 +244,31 @@ const createNewUserSendOTP = async (data) => {
     about = about.trim();
     password = password.trim();
 
+
     // Checking if user already exists
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
       return { error: "User with provided email already exists" };
     } else {
+
+      // Validate input fields
+      if (!profile_pic || !email || !name || !age || !diploma || !about || !password) {
+        return { error: "Empty input fields" };
+      }
+
+      if (!/^[a-zA-Z0-9 ]*$/.test(name)) {
+        return { error: "Invalid name entered" };
+      }
+
+      if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+        return { error: "Invalid email entered" };
+      }
+
+      if (password.length < 6) {
+        return { error: "Password is too short" };
+      }
+
       // Hash password
       const hashedPassword = await hashData(password);
       const newUser = new User({
@@ -277,11 +298,11 @@ const createNewUserSendOTP = async (data) => {
 
       return createdUser;
     }
-
   } catch (error) {
     throw error;
   }
 };
+
 //verify signup otp & make user verified
 const verifySignupOTP = async (data) => {
   try {
@@ -321,6 +342,11 @@ const verifySignupOTP = async (data) => {
 const resendSignupOTP = async (data) => {
   try {
     const { email } = data;
+
+    // Ensure no missing values
+    if (!email) {
+      return { error: "Provide a value for email" };
+    }
 
     // Fetch user by email
     const fetchedUser = await User.findOne({ email });
@@ -370,7 +396,6 @@ const resendSignupOTP = async (data) => {
         otp: hashedOTP,
         createdAt: Date.now(),
         expiresAt: Date.now() + 1000 * duration, // Convert seconds to milliseconds
-
       });
 
       await newOTP.save();
@@ -386,6 +411,11 @@ const resendSignupOTP = async (data) => {
 const resetPasswordOTP = async (data) => {
   try {
     const { email } = data;
+
+    // Ensure no missing values
+    if (!email) {
+      return { error: "Provide a value for email" };
+    }
 
     // Fetch user by email
     const fetchedUser = await User.findOne({ email });
@@ -488,6 +518,12 @@ const resetPassword = async (data) => {
 const viewProfile = async (data) => {
   try {
     let { id } = data;
+
+    // Check if the provided ID is a valid ObjectId
+    if (!mongoose.isValidObjectId(id)) {
+      return { error: 'Invalid user ID' };
+    }
+
     // fetch user profile from the database based on id
     const userProfile = await User.findById(id);
 
@@ -504,10 +540,14 @@ const viewProfile = async (data) => {
 // edit profile
 const editProfile = async (data) => {
   try {
-    const { id, profile_pic, name, age, diploma, about, password } = data;
+    // const { id, profile_pic, name, age, diploma, about, password } = data;
+    const { id, profile_pic, name, age, diploma, about } = data;
+
 
     // Construct the body with the fields to be updated
-    const body = { name, age, diploma, about, password };
+    // const body = { name, age, diploma, about, password };
+    const body = { name, age, diploma, about };
+
 
     // If a new profile_pic is provided, update it
     if (profile_pic) {
@@ -515,7 +555,7 @@ const editProfile = async (data) => {
     }
 
     // Find and update the user profile
-    const updatedUserProfile = await User.findByIdAndUpdate(id, body, { new: true });
+    const updatedUserProfile = await User.findOneAndUpdate({ _id: id }, body, { new: true });
 
     // Check if the user profile was found
     if (!updatedUserProfile) {
@@ -529,19 +569,37 @@ const editProfile = async (data) => {
 };
 
 //delete profile
+// const deleteUser = async (req, res) => {
+//   try {
+//     const deleted = await User.findByIdAndDelete(req.params.id, { new: true });
+
+//     if (!deleted) {
+//       return { error: "User not found" };
+//     }
+
+//     res.json({ message: "User deleted successfully" });
+//     return deleted;
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// }
+
+// delete profile
 const deleteUser = async (req, res) => {
   try {
-    const deleted = await User.findByIdAndDelete(req.params.id, { new: true });
+    const deleted = await User.findByIdAndDelete(req.params.id);
+    //remove them from events they signed up to
 
     if (!deleted) {
-      return { error: "User not found" };
+      return { error: 'User not found' };
+      //return res.status(404).json({ error: "User not found" });
     }
 
-    res.json({ message: "User deleted successfully" });
-    return deleted;
+    return { message: "User deleted successfully" };
+
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    throw error;
   }
-}
+};
 
 module.exports = { createToken, checkUserLoginCred, verifyLoginOTP, createNewUserSendOTP, verifySignupOTP, resendSignupOTP, checkAdminLoginCred, viewProfile, editProfile, deleteUser, resetPasswordOTP, resetPassword, sendVerificationOTP };
