@@ -3,8 +3,8 @@
 import React from 'react';
 import Navbar from "../components/Navbar";
 import homeImage from "../images/home.png";
-import { UseRequireAuth } from '../components/RequireAuth';
-import { NavLink,useNavigate } from "react-router-dom";
+import { CheckMemberJWTExpiryAndRole } from '../components/RequireAuth';
+import { NavLink, useNavigate } from "react-router-dom";
 import './css/HomePage.css';
 
 export const UserHome = () => {
@@ -14,7 +14,7 @@ export const UserHome = () => {
   //   navigate("/", { replace: true });
   // }
 
-  UseRequireAuth();
+  CheckMemberJWTExpiryAndRole();
 
   return (
     <div>
@@ -38,7 +38,7 @@ export const UserHome = () => {
           <div className='col-md-4 blue-section-image' >
             <img src={homeImage} alt="Your Alt Text" />
           </div>
-         
+
         </div>
       </div>
       <div className='intro'>

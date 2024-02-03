@@ -1,7 +1,7 @@
 // SideNavbar.js
 
 import React from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from "react-router-dom";
 import { LogoutUser } from '../components/RequireAuth';
 import { jwtDecode } from 'jwt-decode';
 
@@ -9,18 +9,30 @@ import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 import iconImage from '../images/icon.png';
 import adminImage from '../images/admin.png';
 import logoutImage from '../images/logout.png';
+import { CheckAdminJWTExpiryAndRole } from '../components/RequireAuth';
 
 const SideNavbar = () => {
+  CheckAdminJWTExpiryAndRole();
+  let handleLogout = ''
+
   const navigate = useNavigate();
   const storedToken = localStorage.getItem('token');
-  const decodedToken = jwtDecode(storedToken);
-  const userId = decodedToken.userId;
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/', { replace: true });
-    LogoutUser(userId);
-  };
+  if (!storedToken || typeof storedToken !== 'string') {
+    // Handle the case when the token is not present
+    navigate("/", { replace: true });
+    return null; // Return null to prevent further rendering
+  }
+  else {
+    const decodedToken = jwtDecode(storedToken);
+    const userId = decodedToken.userId
+    handleLogout = () => {
+      localStorage.removeItem("token");
+      //now after logging out user cannot access the home page
+      navigate("/", { replace: true });
+      LogoutUser(userId)
+    };
+  }
 
   return (
     <div className="col-auto col-md-3 col-xl-2 px-sm-2 px-0 " style={{ backgroundColor: 'lightblue' }}>

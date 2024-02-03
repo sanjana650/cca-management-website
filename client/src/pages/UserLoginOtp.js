@@ -3,14 +3,14 @@ import { useNavigate, useParams } from "react-router";
 import axios from 'axios';
 import { Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { useRequireAuth } from '../components/RequireAuth'
+import { CheckMemberJWTExpiryAndRole } from '../components/RequireAuth'
 
 export const UserLoginOtp = () => {
   const [otp, setOtp] = useState("");
   const { email } = useParams(); // Access email from URL parameters
   const [attempts, setAttempts] = useState(0);
   const navigate = useNavigate();
-  // useRequireAuth();
+  // CheckMemberJWTExpiryAndRole();
 
 
   const updateOtpForm = (e) => {

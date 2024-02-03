@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from "../components/Navbar";
-import { UseRequireAuth } from '../components/RequireAuth'
+import { CheckMemberJWTExpiryAndRole } from '../components/RequireAuth'
 import MemberDisplayUpdate from '../components/MemberDisplayUpdate'
 
 import axios from 'axios';
 
 export const MemberUpdates = () => {
-  UseRequireAuth();
+  CheckMemberJWTExpiryAndRole();
   const [updates, setUpdates] = useState([]);
 
   const getUpdates = async () => {
@@ -38,7 +38,7 @@ export const MemberUpdates = () => {
     ));
   };
 
-    return (
+  return (
     <div>
       <Navbar />
       <br></br>

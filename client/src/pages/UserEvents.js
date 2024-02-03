@@ -36,6 +36,10 @@ export const UserEvents = () => {
 
   const eventsList = () => {
     if (Array.isArray(events)) {
+      if (events.length === 0) {
+        return <p>No events found.</p>;
+      }
+
       return events.map((event) => (
         <MemberDisplayEventCard
           key={event._id}
@@ -43,14 +47,13 @@ export const UserEvents = () => {
           onJoin={() => joinEvent(event._id)}
           onLeave={() => leaveEvent(event._id)}
           userId={userId}
-
         />
       ));
     } else {
       return <p>No events found.</p>;
-
     }
   };
+
 
   const updateEventCount = (event_id, newCount) => {
     setEvents((prevEvents) => {
@@ -74,6 +77,8 @@ export const UserEvents = () => {
       });
       updateEventCount(event_id, response.data.count);
       alert(`Successfully joined an event`)
+      window.location.reload(false);
+
     } catch (error) {
       console.error(error.message);
     }
@@ -88,6 +93,7 @@ export const UserEvents = () => {
       });
       updateEventCount(event_id, response.data.count);
       alert(`Successfully left an event`)
+      window.location.reload(false);
 
     } catch (error) {
       console.error(error.message);
@@ -114,20 +120,30 @@ export const UserEvents = () => {
 
   const handleFilter = async (eventType) => {
     try {
-
       const response = await axios.get(`http://127.0.0.1:5050/user-events/filter-events/${eventType}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-      setEvents(response.data);
-      console.log(response.data)
-
-
+  
+      if (response.status === 200) {
+        // Handle the case when events are found for the specified eventType
+        setEvents(response.data);
+      } else {
+        // Handle the case when no events are found for the specified eventType
+        console.log('No events found');
+        setEvents([]);
+      }
     } catch (error) {
-      console.error(error.message);
+      // Handle other errors (e.g., network issues)
+      console.error('Error fetching events:', error.message);
+      setEvents([]);
     }
-  }
+  };
+  
+
+
+
 
   const allEvents = async () => {
     setSearchQuery('');

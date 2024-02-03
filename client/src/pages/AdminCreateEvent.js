@@ -5,8 +5,11 @@ import browserImageCompression from 'browser-image-compression';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { CheckAdminJWTExpiryAndRole } from '../components/RequireAuth';
 
 export const AdminAddEvents = () => {
+  CheckAdminJWTExpiryAndRole();
+
   const navigate = useNavigate();
   const [event, setEvent] = useState({
     event_image: '',

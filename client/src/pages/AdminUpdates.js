@@ -7,11 +7,11 @@ import EditUpdate from "../components/EditUpdate";
 import AddUpdate from "../components/AddUpdate";
 
 import axios from 'axios';
-import { UseRequireAuth } from '../components/RequireAuth';
+import { CheckAdminJWTExpiryAndRole } from '../components/RequireAuth';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export const AdminUpdates = () => {
-  UseRequireAuth();
+  CheckAdminJWTExpiryAndRole();
 
   const [updates, setUpdates] = useState([]);
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -20,7 +20,7 @@ export const AdminUpdates = () => {
 
 
   const getUpdates = async () => {
-    
+
     try {
       const response = await axios.get(`http://127.0.0.1:5050/admin-updates/view-all-updates`, {
         headers: {

@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import AdminNavbar from "../components/AdminNavbar";
 import axios from 'axios';
 import AdminDisplayUser from '../components/AdminDisplayUser';
-import { UseRequireAuth } from '../components/RequireAuth'
+import { CheckAdminJWTExpiryAndRole } from '../components/RequireAuth'
 
 export const AdminMember = () => {
-  UseRequireAuth();
   const [members, setMembers] = useState([])
   const [searchQuery, setSearchQuery] = useState('');
   //add logic to redirect them back to landing page if they attempt to enter this page w/o logging in
+  CheckAdminJWTExpiryAndRole();
 
   const getMembers = async () => {
     try {

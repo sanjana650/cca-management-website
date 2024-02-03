@@ -4,9 +4,11 @@ import axios from 'axios';
 import { useParams, useNavigate, NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { CheckAdminJWTExpiryAndRole } from '../components/RequireAuth';
 
 
 export const AdminViewSelectedEvent = () => {
+  CheckAdminJWTExpiryAndRole();
   const [event, setEvent] = useState({
     event_image: '',
     title: '',

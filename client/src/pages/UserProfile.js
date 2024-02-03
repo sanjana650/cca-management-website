@@ -3,24 +3,24 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
-import { UseRequireAuth } from '../components/RequireAuth';
+import { CheckMemberJWTExpiryAndRole } from '../components/RequireAuth';
 import DisplayMemberProfile from '../components/DisplayMemberProfile';
 
 export const UserProfile = () => {
   const navigate = useNavigate();
 
   const [userProfile, setUserProfile] = useState(null);
-  UseRequireAuth();
+  CheckMemberJWTExpiryAndRole();
 
   let userId = ''
   const token = localStorage.getItem('token');
   //If token is invalid or does not exist
-  if(typeof token !== 'string' || !token){
+  if (typeof token !== 'string' || !token) {
     navigate('/', { replace: true });
   }
-  else{
+  else {
     const decodedToken = jwtDecode(token);
-    userId = decodedToken.userId; 
+    userId = decodedToken.userId;
   }
 
 
@@ -49,26 +49,37 @@ export const UserProfile = () => {
   }, []);
 
   async function deleteProfile(userId) {
-    try {
-      const response = await axios.delete(`http://127.0.0.1:5050/user/delete-profile/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+    // Display a confirmation dialog before proceeding
+    const confirmDelete = window.confirm("Are you sure you want to delete your profile? This action cannot be undone.");
 
-      if (response.status === 200) {
-        localStorage.removeItem("token");
+    if (!confirmDelete) {
+      window.location.reload(false);
 
-        //Redirect to the home page after successful deletion
-        navigate('/');
-      } else {
-        const message = `An error occurred: ${response.statusText}`;
-        window.alert(message);
+    } else {
+      try {
+        const response = await axios.delete(`http://127.0.0.1:5050/user/delete-profile/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 200) {
+          localStorage.removeItem("token");
+
+          // Redirect to the home page after successful deletion
+          navigate('/');
+        } else {
+          const message = `An error occurred: ${response.statusText}`;
+          window.alert(message);
+        }
+      } catch (error) {
+        console.error('Error deleting user profile:', error.message);
       }
-    } catch (error) {
-      console.error('Error deleting user profile:', error.message);
     }
   }
+
+
+
 
   const profileList = () => {
     return <DisplayMemberProfile

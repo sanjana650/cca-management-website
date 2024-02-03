@@ -5,8 +5,11 @@ import DisplayEventCard from '../components/DisplayEventCard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useParams, useNavigate, NavLink } from 'react-router-dom';
+import { CheckAdminJWTExpiryAndRole } from '../components/RequireAuth';
 
 export const AdminEvents = () => {
+  CheckAdminJWTExpiryAndRole();
+
   const [events, setEvents] = useState([]);
   const navigate = useNavigate();
 
@@ -38,7 +41,7 @@ export const AdminEvents = () => {
     ))
   }
 
-  const addEvent=()=>{
+  const addEvent = () => {
     navigate(`/admin-add-event`)
 
   }

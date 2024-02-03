@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { LogoutUser } from '../components/RequireAuth'
 import { jwtDecode } from 'jwt-decode';
-import { UseRequireAuth } from '../components/RequireAuth'
+import { CheckMemberJWTExpiryAndRole } from '../components/RequireAuth'
 
 
 import iconImage from "../images/icon.png";
@@ -13,7 +13,7 @@ import logoutImage from "../images/logout.png";
 
 
 export default function Navbar() {
-  UseRequireAuth()
+  CheckMemberJWTExpiryAndRole()
 
   let handleLogout = ''
 

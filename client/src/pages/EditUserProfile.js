@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import browserImageCompression from 'browser-image-compression';
-import { UseRequireAuth } from '../components/RequireAuth';
+import { CheckMemberJWTExpiryAndRole } from '../components/RequireAuth';
 import { NavLink, useNavigate } from 'react-router-dom';
 
 export const EditUserProfile = () => {
   const navigate = useNavigate();
 
   const [userProfile, setUserProfile] = useState({
-    profile_pic: '', 
+    profile_pic: '',
     email: '',
     name: '',
     age: '',
@@ -19,7 +19,7 @@ export const EditUserProfile = () => {
 
   const [selectedImage, setSelectedImage] = useState(null);
 
-  UseRequireAuth();
+  CheckMemberJWTExpiryAndRole();
 
   useEffect(() => {
     async function getProfile() {
@@ -78,10 +78,10 @@ export const EditUserProfile = () => {
   const imageCompression = async (file) => {
     try {
       const options = {
-        maxSizeMB: 0.1, 
+        maxSizeMB: 0.1,
         useWebWorker: true,
       };
-      return await browserImageCompression(file, options); 
+      return await browserImageCompression(file, options);
     } catch (error) {
       console.error('Error compressing image:', error.message);
       throw error;
@@ -90,7 +90,7 @@ export const EditUserProfile = () => {
 
 
 
-  
+
   const handleSave = async () => {
     try {
       // Add validation checks
@@ -98,22 +98,22 @@ export const EditUserProfile = () => {
         window.alert("Please fill in all fields and ensure age is a number.");
         return;
       }
-  
+
       const token = localStorage.getItem('token');
       const userId = userProfile._id;
-  
+
       const formData = new FormData();
       formData.append('profile_pic', selectedImage);
       formData.append('name', userProfile.name);
       formData.append('age', userProfile.age);
       formData.append('diploma', userProfile.diploma);
       formData.append('about', userProfile.about);
-  
+
       setUserProfile((prevProfile) => ({
         ...prevProfile,
         profile_pic: selectedImage ? URL.createObjectURL(selectedImage) : prevProfile.profile_pic,
       }));
-  
+
       const response = await axios.patch(
         `http://127.0.0.1:5050/user/edit-profile/${userId}`,
         formData,
@@ -124,7 +124,7 @@ export const EditUserProfile = () => {
           },
         }
       );
-  
+
       if (response.status === 200) {
         const updatedProfile = await response.data;
         setUserProfile(updatedProfile);
@@ -139,7 +139,7 @@ export const EditUserProfile = () => {
       console.error('Error updating user profile:', error.message);
     }
   };
-  
+
 
 
 

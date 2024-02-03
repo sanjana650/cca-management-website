@@ -18,44 +18,105 @@ export const LogoutUser = async (userId) => {
   }
 };
 
-
-//if jwt token isnt valid or does not exist it redirects to landing page & logs user out 
-export const UseRequireAuth = () => {
+export const CheckAdminJWTExpiryAndRole = () => {
   const navigate = useNavigate();
-  // console.log("UseRequireAuth hook is running...");
 
   useEffect(() => {
-    //check if jwt exists
+    // Check if JWT exists
     const storedToken = localStorage.getItem('token');
 
-    if (!storedToken) {
-      // console.log("No token found. Redirecting to /");
+    if (!storedToken || typeof storedToken !== 'string') {
+      // No token found or invalid token, redirect to "/"
       navigate("/", { replace: true });
+      return;
+    }
 
+    // Decode to see user role and expiry status
+    const decodedToken = jwtDecode(storedToken);
+    const expirationTime = decodedToken.exp * 1000; // Convert to milliseconds
+    const userId = decodedToken.userId;
+    const userRole = decodedToken.role; // Get the user role
+
+    // Check if the token is expired
+    if (Date.now() > expirationTime) {
+      localStorage.removeItem("token");
+      alert("JWT Token expired. Please login again!");
+      // Token is expired, navigate to the default page
+      navigate("/", { replace: true });
+      LogoutUser(userId);
+    } else if (userRole === 'admin') {
+      // If the user is an admin, stay on the current route or perform admin-specific logic
+      console.log("User is an admin");
     } else {
-      // Check if the token is a string
-      if (typeof storedToken !== 'string') {
-        // Handle the case when the token is not a string
-        navigate('/', { replace: true });
-        return null; // Return null to prevent further rendering
-      }
-      //decode to see user role & expiry status
-      const decodedToken = jwtDecode(storedToken);
-      const expirationTime = decodedToken.exp * 1000; // Convert to milliseconds
-      const userId = decodedToken.userId
-
-      // Check if the token is expired
-      if (Date.now() > expirationTime) {
-        localStorage.removeItem("token");
-
-        alert("JWT Token expired. Please login again!")
-        // Token is expired, navigate to the default page
-        navigate("/", { replace: true });
-
-        LogoutUser(userId);
-      }
-
+      navigate("/", { replace: true });
     }
   }, [navigate]);
 };
+
+export const CheckMemberJWTExpiryAndRole = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if JWT exists
+    const storedToken = localStorage.getItem('token');
+
+    if (!storedToken || typeof storedToken !== 'string') {
+      // No token found or invalid token, redirect to "/"
+      navigate("/", { replace: true });
+      return;
+    }
+
+    // Decode to see user role and expiry status
+    const decodedToken = jwtDecode(storedToken);
+    const expirationTime = decodedToken.exp * 1000; // Convert to milliseconds
+    const userId = decodedToken.userId;
+    const userRole = decodedToken.role; // Get the user role
+
+    // Check if the token is expired
+    if (Date.now() > expirationTime) {
+      localStorage.removeItem("token");
+      alert("JWT Token expired. Please login again!");
+      // Token is expired, navigate to the default page
+      navigate("/", { replace: true });
+      LogoutUser(userId);
+    } else if (userRole === 'member') {
+      // If the user is an admin, stay on the current route or perform admin-specific logic
+      console.log("User is a member");
+    } else {
+      navigate("/", { replace: true });
+    }
+  }, [navigate]);
+};
+
+
+
+// export const CheckMemberJWTExpiryAndRole = () => {
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     // Check if JWT exists
+//     const storedToken = localStorage.getItem('token');
+
+//     if (!storedToken || typeof storedToken !== 'string') {
+//       // No token found or invalid token, redirect to "/"
+//       navigate("/", { replace: true });
+//       return;
+//     }
+
+//     // Decode to see user role and expiry status
+//     const decodedToken = jwtDecode(storedToken);
+//     const expirationTime = decodedToken.exp * 1000; // Convert to milliseconds
+//     const userId = decodedToken.userId;
+
+//     // Check if the token is expired
+//     if (Date.now() > expirationTime) {
+//       localStorage.removeItem("token");
+//       alert("JWT Token expired. Please login again!");
+//       // Token is expired, navigate to the default page
+//       navigate("/", { replace: true });
+//       LogoutUser(userId);
+//     }
+//   }, [navigate]);
+// };
+
 

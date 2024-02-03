@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from "../components/Navbar";
 import axios from 'axios';
-import MemberDisplayUser from '../components/MemberDisplayUser';  
-import { UseRequireAuth } from '../components/RequireAuth'
+import MemberDisplayUser from '../components/MemberDisplayUser';
+import { CheckMemberJWTExpiryAndRole } from '../components/RequireAuth'
 
 
 export const UserMember = () => {
-  UseRequireAuth();
+  CheckMemberJWTExpiryAndRole();
 
   //get members
   const [members, setMembers] = useState([])
@@ -95,7 +95,7 @@ export const UserMember = () => {
                 </button>
               </div>
             </div>
-            <button className="btn btn-outline-secondary" type="button" style={{marginTop:'10px'}} onClick={allMembers}>
+            <button className="btn btn-outline-secondary" type="button" style={{ marginTop: '10px' }} onClick={allMembers}>
               All Members
             </button>
           </div>
