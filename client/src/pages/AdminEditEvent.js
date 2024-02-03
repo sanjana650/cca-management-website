@@ -51,7 +51,27 @@ export const AdminEditEvent = () => {
     getEventInfo(event_id);
   }, [event_id]);
 
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
 
+  const handleDrop = async (e) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      try {
+        setLoading(true);
+
+        // Compress the image before setting it
+        const compressedImage = await imageCompression(file);
+        setSelectedImage(compressedImage);
+      } catch (error) {
+        console.error('Error compressing image:', error.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
 
   //handle input change
   const handleInputChange = (e) => {
@@ -100,15 +120,6 @@ export const AdminEditEvent = () => {
     const maxSlotsValue = parseInt(event.max_slots, 10);
 
     try {
-      //     console.log(`
-      //   title: ${event.title},
-      //   event_type: ${event.event_type},
-      //   event_date: ${event.event_date},
-      //   event_time: ${event.event_time},
-      //   location: ${event.location},
-      //   max_slots: ${event.max_slots},
-      //   description: ${event.description}
-      // `);
 
       // console.log('Updated state:', event);
 
@@ -191,18 +202,20 @@ export const AdminEditEvent = () => {
                     />
                   )}
                 </div>
-                <div style={{ marginTop: '5px', fontSize: '14px' }}>
-                  <label htmlFor="inputImage" style={{ cursor: 'pointer' }}>
+                <div className="mb-2">
+                  <label htmlFor="inputImage" style={{ cursor: 'pointer', textDecoration: 'underline', color: '#1D3C8A' }}>
                     Change Image
                   </label>
+                  <input
+                    type="file"
+                    id="inputImage"
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                    onChange={handleImageChange}
+                    onClick={(e) => (e.target.value = null)} // Add this line
+                  />
                 </div>
-                <input
-                  type="file"
-                  id="inputImage"
-                  accept="image/*"
-                  style={{ display: 'none' }}
-                  onChange={handleImageChange}
-                />
+
               </div>
 
               <div className="col-md-7">

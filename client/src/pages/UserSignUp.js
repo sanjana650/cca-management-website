@@ -14,14 +14,40 @@ export const UserSignUp = () => {
     password: "",
   });
 
+
+
   const [selectedImage, setSelectedImage] = useState(null);
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   //Update the state properties for the forms every time there is a change
   function updateForm(value) {
     setForm((prev) => ({ ...prev, ...value }));
   }
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = async (e) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      try {
+        const compressedImage = await imageCompression(file, {
+          quality: 0.6,
+        });
+
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setSelectedImage(reader.result);
+        };
+        reader.readAsDataURL(compressedImage);
+      } catch (error) {
+        console.error('Error compressing image:', error.message);
+      }
+    }
+  };
 
   //Handle image selection and convert to base64 url
   const handleImageChange = async (e) => {
@@ -65,7 +91,7 @@ export const UserSignUp = () => {
     const imageDataUrl = selectedImage ? selectedImage.split(",")[1] : null;
 
     const userData = {
-      profile_pic: imageDataUrl,  
+      profile_pic: imageDataUrl,
       email: form.email,
       name: form.name,
       age: form.age,
@@ -75,7 +101,7 @@ export const UserSignUp = () => {
     };
 
     try {
-      setLoading(true); 
+      setLoading(true);
 
       const response = await axios.post('http://127.0.0.1:5050/user/signup-and-send-otp', userData);
 
@@ -92,7 +118,7 @@ export const UserSignUp = () => {
         console.error('Error during signup request:', error.message);
       }
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   }
 
@@ -111,7 +137,29 @@ export const UserSignUp = () => {
       <div className="background-image" style={{ backgroundImage: `url('https://www.tp.edu.sg/content/dam/tp-web/images/schools---courses/for-prospective-students/all-academic-schools/school-of-informatics---it/information-technology/IIT-t30-tn.jpg')` }}></div>
       <div className="login-container content-box bg-white p-5 rounded text-center">
         <h1>Member Sign Up</h1>
-
+        {/* Drag and Drop Image Upload Section */}
+        <div
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
+          style={{ cursor: 'pointer' }}
+        >
+          <div className="rounded-circle overflow-hidden mx-auto mb-3" style={{ width: '100px', height: '100px', border: '2px solid #007bff' }}>
+            {selectedImage ? (
+              <img
+                src={selectedImage}
+                alt="Selected"
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+            ) : (
+              <img
+                src="https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg"
+                alt="Placeholder"
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+            )}
+          </div>
+          <p>Drag and drop an image or click upload image</p>
+        </div>
         {/* Image Upload Section */}
         <div>
           <input
@@ -122,24 +170,7 @@ export const UserSignUp = () => {
             style={{ display: 'none' }}
           />
           <div className="text-center">
-            <div
-              className="rounded-circle overflow-hidden mx-auto mb-3"
-              style={{ width: '100px', height: '100px', border: '2px solid #007bff' }}
-            >
-              {selectedImage ? (
-                <img
-                  src={selectedImage}
-                  alt="Selected"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-              ) : (
-                <img
-                  src="https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg"  // Placeholder image
-                  alt="Placeholder"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-              )}
-            </div>
+ 
           </div>
           <button
             className="btn btn-primary"

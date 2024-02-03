@@ -4,8 +4,11 @@ import axios from 'axios';
 import { useParams, useNavigate, NavLink } from 'react-router-dom';
 import MemberDisplayEventCard from '../components/MemberDisplayEventCard';
 import { jwtDecode } from 'jwt-decode';
+import { CheckMemberJWTExpiryAndRole } from '../components/RequireAuth'
 
 export const UserEvents = () => {
+  CheckMemberJWTExpiryAndRole();
+
   const [events, setEvents] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [eventType, setEventType] = useState('');
@@ -125,7 +128,7 @@ export const UserEvents = () => {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-  
+
       if (response.status === 200) {
         // Handle the case when events are found for the specified eventType
         setEvents(response.data);
@@ -140,7 +143,7 @@ export const UserEvents = () => {
       setEvents([]);
     }
   };
-  
+
 
 
 

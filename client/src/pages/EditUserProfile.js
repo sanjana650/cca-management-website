@@ -6,6 +6,8 @@ import { CheckMemberJWTExpiryAndRole } from '../components/RequireAuth';
 import { NavLink, useNavigate } from 'react-router-dom';
 
 export const EditUserProfile = () => {
+  CheckMemberJWTExpiryAndRole();
+
   const navigate = useNavigate();
 
   const [userProfile, setUserProfile] = useState({
@@ -18,8 +20,8 @@ export const EditUserProfile = () => {
   });
 
   const [selectedImage, setSelectedImage] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  CheckMemberJWTExpiryAndRole();
 
   useEffect(() => {
     async function getProfile() {
@@ -54,7 +56,27 @@ export const EditUserProfile = () => {
     setUserProfile({ ...userProfile, [e.target.id]: e.target.value });
   };
 
-  const [loading, setLoading] = useState(false);
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = async (e) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      try {
+        setLoading(true);
+
+        // Compress the image before setting it
+        const compressedImage = await imageCompression(file);
+        setSelectedImage(compressedImage);
+      } catch (error) {
+        console.error('Error compressing image:', error.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
 
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
@@ -73,8 +95,6 @@ export const EditUserProfile = () => {
     }
   };
 
-
-
   const imageCompression = async (file) => {
     try {
       const options = {
@@ -87,9 +107,6 @@ export const EditUserProfile = () => {
       throw error;
     }
   };
-
-
-
 
   const handleSave = async () => {
     try {
@@ -140,9 +157,6 @@ export const EditUserProfile = () => {
     }
   };
 
-
-
-
   return (
     <div>
       <br />
@@ -153,31 +167,36 @@ export const EditUserProfile = () => {
           <div className="container">
             <div className="row mt-5">
               <div className="col-md-4 text-center">
-                <div className="rounded-circle overflow-hidden mx-auto position-relative" style={{ width: '150px', height: '150px' }}>
-                  {loading ? (
-                    // Display a loading spinner or placeholder while processing the image
-                    <div>Loading image...</div>
-                  ) : (
-                    <img
-                      src={selectedImage ? URL.createObjectURL(selectedImage) : `data:image/png;base64,${userProfile.profile_pic || ''}`}
-                      alt="Profile"
-                      className="img-fluid rounded-circle"
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    />
-                  )}
-                </div>
-                <div style={{ marginTop: '5px', fontSize: '14px' }}>
-                  <label htmlFor="inputImage" style={{ cursor: 'pointer' }}>
-                    Change Image
+                <div
+                  onDragOver={handleDragOver}
+                  onDrop={handleDrop}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <label htmlFor="fileInput" style={{ cursor: 'pointer' }}>
+                    <div className="rounded-circle overflow-hidden mx-auto position-relative" style={{ width: '150px', height: '150px' }}>
+                      {loading ? (
+                        // Display a loading spinner or placeholder while processing the image
+                        <div>Loading image...</div>
+                      ) : (
+                        <img
+                          src={selectedImage ? URL.createObjectURL(selectedImage) : `data:image/png;base64,${userProfile.profile_pic || ''}`}
+                          alt="Profile"
+                          className="img-fluid rounded-circle"
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        />
+                      )}
+                    </div>
+                    <p>Drag and drop an image or click to upload</p>
                   </label>
+                  <input
+                    type="file"
+                    id="fileInput"
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                    onChange={handleImageChange}
+                  />
+
                 </div>
-                <input
-                  type="file"
-                  id="inputImage"
-                  accept="image/*"
-                  style={{ display: 'none' }}
-                  onChange={handleImageChange}
-                />
               </div>
 
               <div className="col-md-8">
@@ -244,5 +263,4 @@ export const EditUserProfile = () => {
       </div>
     </div>
   );
-
 };

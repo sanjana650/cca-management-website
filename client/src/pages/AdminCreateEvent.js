@@ -25,6 +25,28 @@ export const AdminAddEvents = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = async (e) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      try {
+        setLoading(true);
+
+        // Compress the image before setting it
+        const compressedImage = await imageCompression(file);
+        setSelectedImage(compressedImage);
+      } catch (error) {
+        console.error('Error compressing image:', error.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
   // handle input change
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -183,31 +205,35 @@ export const AdminAddEvents = () => {
                 {/* Use the Font Awesome icon component */}
               </div>
               <div className="col-md-4 text-center">
-                <div className="overflow-hidden mx-auto position-relative" style={{ width: '150px', height: '150px' }}>
-                  {loading ? (
-                    <div>Loading image...</div>
-                  ) : (
-                    <img
-                      src={selectedImage && selectedImage.startsWith('data:') ? selectedImage : `https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg`}
-                      alt="Event"
-                      className="img-fluid"
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    />
+                <div
+                  onDragOver={handleDragOver}
+                  onDrop={handleDrop}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <div className="overflow-hidden mx-auto position-relative" style={{ width: '150px', height: '150px' }}>
+                    {loading ? (
+                      <div>Loading image...</div>
+                    ) : (
+                      <img
+                        src={selectedImage && selectedImage.startsWith('data:') ? selectedImage : `https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg`}
+                        alt="Event"
+                        className="img-fluid"
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      />
+                    )}
+                  </div>
+                  <label htmlFor="inputImage" style={{ cursor: 'pointer', textDecoration: 'underline', color: '#1D3C8A' }}>
+                  Drag and drop an image or click to upload                  </label>
+                  <input
+                    type="file"
+                    id="inputImage"
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                    onChange={handleImageChange}
+                    onClick={(e) => (e.target.value = null)} // Add this line
 
-                  )}
+                  />
                 </div>
-                <div style={{ marginTop: '5px', fontSize: '14px' }}>
-                  <label htmlFor="inputImage" style={{ cursor: 'pointer' }}>
-                    Change Image
-                  </label>
-                </div>
-                <input
-                  type="file"
-                  id="inputImage"
-                  accept="image/*"
-                  style={{ display: 'none' }}
-                  onChange={handleImageChange}
-                />
               </div>
 
               <div className="col-md-7">

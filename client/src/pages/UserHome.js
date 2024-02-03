@@ -8,11 +8,6 @@ import { NavLink, useNavigate } from "react-router-dom";
 import './css/HomePage.css';
 
 export const UserHome = () => {
-  // const navigate = useNavigate();
-
-  // if(!localStorage.getItem('token')){
-  //   navigate("/", { replace: true });
-  // }
 
   CheckMemberJWTExpiryAndRole();
 
