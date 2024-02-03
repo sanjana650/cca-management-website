@@ -15,21 +15,21 @@ export const UserSignUp = () => {
   });
 
   const [selectedImage, setSelectedImage] = useState(null);
-  const [loading, setLoading] = useState(false); // New state for loading indicator
+  const [loading, setLoading] = useState(false); 
   const navigate = useNavigate();
 
-  // Update the state properties for the forms every time there is a change
+  //Update the state properties for the forms every time there is a change
   function updateForm(value) {
     setForm((prev) => ({ ...prev, ...value }));
   }
 
-  // Handle image selection and convert to base64 URL
+  //Handle image selection and convert to base64 url
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
       try {
         const compressedImage = await imageCompression(file, {
-          quality: 0.6, // Quality of img
+          quality: 0.6, //Quality of img
         });
 
         const reader = new FileReader();
@@ -61,11 +61,11 @@ export const UserSignUp = () => {
       return;
     }
 
-    // Convert the base64-encoded image to a data URL
+    //Convert the base64-encoded image to a data URL
     const imageDataUrl = selectedImage ? selectedImage.split(",")[1] : null;
 
     const userData = {
-      profile_pic: imageDataUrl,  // Updated field name for the base64 image URL
+      profile_pic: imageDataUrl,  
       email: form.email,
       name: form.name,
       age: form.age,
@@ -75,7 +75,7 @@ export const UserSignUp = () => {
     };
 
     try {
-      setLoading(true); // Set loading to true before making the request
+      setLoading(true); 
 
       const response = await axios.post('http://127.0.0.1:5050/user/signup-and-send-otp', userData);
 
@@ -83,7 +83,6 @@ export const UserSignUp = () => {
         alert(`Error: ${response.data.error}`);
         console.log(response.data.error);
       } else {
-        // Only navigate if there is no error
         navigate(`/user-signup-otp/${form.email}`);
       }
     } catch (error) {
@@ -93,7 +92,7 @@ export const UserSignUp = () => {
         console.error('Error during signup request:', error.message);
       }
     } finally {
-      setLoading(false); // Set loading back to false after the request is complete
+      setLoading(false); 
     }
   }
 

@@ -8,14 +8,14 @@ export const UserSignupOtp = () => {
   const [form, setForm] = useState({
     otp: ""
   });
-  const { email } = useParams(); // Access email from URL parameters
+  const { email } = useParams(); //Access email from URL parameters
   // const decodedEmail = decodeURIComponent(email);
 
-  console.log(email);
+  // console.log(email);
 
   const navigate = useNavigate();
 
-  // Update the state properties for the forms every time there is a change
+  //Update the state properties for the forms every time there is a change
   function updateForm(value) {
     setForm((prev) => ({ ...prev, ...value }));
   }
@@ -24,7 +24,7 @@ export const UserSignupOtp = () => {
     event.preventDefault();
 
     const otpData = {
-      email: email, // Access email from location state
+      email: email, 
       otp: form.otp,
     };
 
@@ -32,15 +32,14 @@ export const UserSignupOtp = () => {
       const response = await axios.post(`http://127.0.0.1:5050/user/verify-signup-otp`, otpData);
 
       if (response.data.error) {
-        alert(response.data.error); // Display error message if OTP verification fails
+        alert(response.data.error); //Display error message if OTP verification fails
       } else {
-        // OTP verification succeeded, navigate to the user's home page
+        // OTP verification succeeded so navigate to the users home page
         navigate('/user-login');
       }
 
       console.log(response.data);
     } catch (error) {
-      // Handle network or other errors
       console.error('Error during OTP verification:', error.message);
     }
   };

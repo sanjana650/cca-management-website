@@ -30,26 +30,25 @@ jest.mock('../utils/sendEmail', () => ({
 
 describe('createToken', () => {
   test('Successfully creates a JWT token with the expected payload', () => {
-    // Mock data for the token payload
+    //Mock data for the token payload
     const tokenData = {
       userId: '12345',
       email: 'test@example.com',
       role: 'admin',
     };
 
-    // Call the createToken function
     const token = createToken(tokenData);
 
-    // Verify that the token is defined
+    //Verify that the token is defined
     expect(token).toBeDefined();
 
-    // Verify that the token is a string
+    //Verify that the token is a string
     expect(typeof token).toBe('string');
 
-    // Decode the token to get the payload
+    //Decode the token to get the payload
     const decodedPayload = jwt.decode(token);
 
-    // Verify that the decoded payload is an object
+    //Verify that the decoded payload is an object
     expect(typeof decodedPayload).toBe('object');
 
     // Verify that the decoded payload matches the expected tokenData
@@ -61,7 +60,7 @@ describe('User/Member Login Tests', () => {
   test("Successful Login & email sending", async () => {
     const hashedPassword = await hashData('testing123');
 
-    // Create a test user
+    //Create a test user
     const testUser = {
       email: 'test@example.com',
       name: 'tester',
@@ -70,7 +69,7 @@ describe('User/Member Login Tests', () => {
       about: 'test',
       password: hashedPassword,
       role: 'member',
-      verified: true, // Set user as verified for testing
+      verified: true, //set user as verified for testing
     };
     await User.create(testUser);
 

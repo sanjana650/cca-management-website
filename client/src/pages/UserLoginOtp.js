@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useParams} from "react-router";
+import { useNavigate, useParams } from "react-router";
 import axios from 'axios';
 import { Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import {  useRequireAuth} from '../components/RequireAuth'
+import { useRequireAuth } from '../components/RequireAuth'
 
 export const UserLoginOtp = () => {
   const [otp, setOtp] = useState("");

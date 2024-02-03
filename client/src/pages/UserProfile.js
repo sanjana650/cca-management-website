@@ -14,9 +14,9 @@ export const UserProfile = () => {
 
   let userId = ''
   const token = localStorage.getItem('token');
+  //If token is invalid or does not exist
   if(typeof token !== 'string' || !token){
     navigate('/', { replace: true });
-
   }
   else{
     const decodedToken = jwtDecode(token);
@@ -59,7 +59,7 @@ export const UserProfile = () => {
       if (response.status === 200) {
         localStorage.removeItem("token");
 
-        // Redirect to the home page after successful deletion
+        //Redirect to the home page after successful deletion
         navigate('/');
       } else {
         const message = `An error occurred: ${response.statusText}`;

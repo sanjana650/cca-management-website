@@ -4,7 +4,7 @@ const { checkUserLoginCred, verifyLoginOTP, createNewUserSendOTP, verifySignupOT
 const { verifyToken, requireMemberRole, requireAdminRole } = require("../utils/auth.js");
 const User = require("../models/userModel.js");
 
-const storage = multer.memoryStorage(); // Store image in memory
+const storage = multer.memoryStorage(); //Store image in memory
 const upload = multer({
   storage: storage,
   limits: {
@@ -108,7 +108,7 @@ router.post('/signup-and-send-otp', upload.single('image'), async (req, res) => 
     // Create user and send verification email
     const role = "member";
     const createdUser = await createNewUserSendOTP({
-      profile_pic: imageBuffer,  // Pass the image buffer to the controller
+      profile_pic: imageBuffer, 
       email,
       name,
       age,
