@@ -33,7 +33,7 @@ const checkUserLoginCred = async (data) => {
     const fetchedUser = await User.findOne({ email });
 
     if (!fetchedUser) {
-      return { error: "Email not found" };
+      return { error: "User not found" };
     }
 
     // Check for missing or incorrect parameters before proceeding
@@ -83,7 +83,7 @@ const checkAdminLoginCred = async (data) => {
     const fetchedUser = await User.findOne({ email });
 
     if (!fetchedUser) {
-      return { error: "Email not found" };
+      return { error: "User not found" };
     }
 
     // Check for missing or incorrect parameters before proceeding

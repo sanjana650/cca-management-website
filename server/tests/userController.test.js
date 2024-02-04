@@ -123,7 +123,7 @@ describe('User/Member Login Tests', () => {
       password: 'testing123',
       role: 'member',
     });
-    expect(result).toEqual({ error: "Email not found" });
+    expect(result).toEqual({ error: "User not found" });
   })
 
   test("Invalid password", async () => {
@@ -299,7 +299,7 @@ describe('Admin Login Tests', () => {
       password: 'testing123',
       role: 'admin',
     });
-    expect(result).toEqual({ error: "Email not found" });
+    expect(result).toEqual({ error: "User not found" });
   })
 
   test("Invalid password", async () => {
