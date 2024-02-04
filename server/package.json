@@ -8,10 +8,18 @@
     "test": " jest",
     "dev": "nodemon server.js"
   },
+  "jest": {
+    "collectCoverage": true,
+    "coverageReporters": ["html", "text-summary"],
+    "collectCoverageFrom": [
+      "controller/*.js"
+    ]
+  },
+
   "nyc": {
     "include": [
-      "controller/userController.js",
-      "routes/user.js"
+      "controller/*.js"
+
     ],
     "exclude": [],
     "reporter": [

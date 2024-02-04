@@ -1,6 +1,6 @@
 
-const  eventsModel  = require("../models/eventsModel.js")
-const  userModel  = require("../models/userModel.js");
+const eventsModel = require("../models/eventsModel.js")
+const userModel = require("../models/userModel.js");
 
 
 const joinEvent = async (req, res) => {
@@ -45,6 +45,7 @@ const joinEvent = async (req, res) => {
 
     res.status(200).json({ message: "User successfully signed up for the event." });
   } catch (error) {
+    console.error(error);  // Log the error
     res.status(500).json({ error: error.message });
   }
 };
@@ -82,6 +83,7 @@ const leaveEvent = async (req, res) => {
 
     res.status(200).json({ message: "User successfully left the event." });
   } catch (error) {
+    console.error(error);  // Log the error
     res.status(500).json({ error: error.message });
   }
 };
@@ -117,8 +119,8 @@ const userSearchEvent = async (req, res) => {
     const searchResults = await eventsModel.find(
       { title: { $regex: new RegExp(title, 'i') } }
     );
-    console.log('Search Results:', searchResults);
-    console.log(searchResults.length);
+    // console.log('Search Results:', searchResults);
+    // console.log(searchResults.length);
 
     if (searchResults.length === 0) {
       return res.json({ message: "No matching events found." });
@@ -127,7 +129,6 @@ const userSearchEvent = async (req, res) => {
     res.json(searchResults);
   } catch (error) {
     return { error: error.message };
-
   }
 }
 

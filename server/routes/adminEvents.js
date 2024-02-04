@@ -88,7 +88,7 @@ router.patch('/edit-event/:id', verifyToken, requireAdminRole, upload.single('ev
     await updated.save();  // Save the updated document
 
     res.json({ message: "Event successfully edited", updated });
-    
+
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
