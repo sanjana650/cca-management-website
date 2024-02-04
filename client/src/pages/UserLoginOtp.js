@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router";
 import axios from 'axios';
 import { Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { CheckMemberJWTExpiryAndRole } from '../components/RequireAuth'
 
 export const UserLoginOtp = () => {
   const [otp, setOtp] = useState("");

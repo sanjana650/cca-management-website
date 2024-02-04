@@ -35,7 +35,7 @@ export const UserProfile = () => {
 
         if (response.status === 200) {
           setUserProfile(response.data.userProfile);
-          //console.log('User Details:', response.data);
+          console.log('User Details:', response.data);
         } else {
           const message = `An error occurred: ${response.statusText}`;
           window.alert(message);
@@ -78,16 +78,12 @@ export const UserProfile = () => {
     }
   }
 
-
-
-
   const profileList = () => {
     return <DisplayMemberProfile
       profile={userProfile}
       deleteProfile={deleteProfile}
     />;
   };
-
 
   return (
     <div>
