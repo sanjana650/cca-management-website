@@ -25,28 +25,6 @@ export const AdminAddEvents = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const handleDragOver = (e) => {
-    e.preventDefault();
-  };
-
-  const handleDrop = async (e) => {
-    e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    if (file) {
-      try {
-        setLoading(true);
-
-        // Compress the image before setting it
-        const compressedImage = await imageCompression(file);
-        setSelectedImage(compressedImage);
-      } catch (error) {
-        console.error('Error compressing image:', error.message);
-      } finally {
-        setLoading(false);
-      }
-    }
-  };
-
   // handle input change
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -141,6 +119,11 @@ export const AdminAddEvents = () => {
         console.log('Invalid Max Slots value:', trimmedEvent.max_slots);
         return;
       }
+      if (maxSlotsValue<0) {
+        alert('Ensure that the Max Slots value is more than 0');
+        console.log('Invalid Max Slots value:', trimmedEvent.max_slots);
+        return;
+      }
 
       // Convert the base64-encoded image to a data URL
       const compressedImage = selectedImage ? selectedImage.split(",")[1] : null;
@@ -189,6 +172,9 @@ export const AdminAddEvents = () => {
     }
   };
 
+  // Define options for the event type dropdown
+  const eventTypeOptions = ['Volunteer', 'Workshop', 'Hackathon', 'Outreach'];
+
   return (
     <div className="d-flex position-relative">
       <br />
@@ -205,35 +191,31 @@ export const AdminAddEvents = () => {
                 {/* Use the Font Awesome icon component */}
               </div>
               <div className="col-md-4 text-center">
-                <div
-                  onDragOver={handleDragOver}
-                  onDrop={handleDrop}
-                  style={{ cursor: 'pointer' }}
-                >
-                  <div className="overflow-hidden mx-auto position-relative" style={{ width: '150px', height: '150px' }}>
-                    {loading ? (
-                      <div>Loading image...</div>
-                    ) : (
-                      <img
-                        src={selectedImage && selectedImage.startsWith('data:') ? selectedImage : `https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg`}
-                        alt="Event"
-                        className="img-fluid"
-                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                      />
-                    )}
-                  </div>
-                  <label htmlFor="inputImage" style={{ cursor: 'pointer', textDecoration: 'underline', color: '#1D3C8A' }}>
-                  Drag and drop an image or click to upload                  </label>
-                  <input
-                    type="file"
-                    id="inputImage"
-                    accept="image/*"
-                    style={{ display: 'none' }}
-                    onChange={handleImageChange}
-                    onClick={(e) => (e.target.value = null)} // Add this line
+                <div className="overflow-hidden mx-auto position-relative" style={{ width: '150px', height: '150px' }}>
+                  {loading ? (
+                    <div>Loading image...</div>
+                  ) : (
+                    <img
+                      src={selectedImage && selectedImage.startsWith('data:') ? selectedImage : `https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg`}
+                      alt="Event"
+                      className="img-fluid"
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
 
-                  />
+                  )}
                 </div>
+                <div style={{ marginTop: '5px', fontSize: '14px' }}>
+                  <label htmlFor="inputImage" style={{ cursor: 'pointer' }}>
+                    Change Image
+                  </label>
+                </div>
+                <input
+                  type="file"
+                  id="inputImage"
+                  accept="image/*"
+                  style={{ display: 'none' }}
+                  onChange={handleImageChange}
+                />
               </div>
 
               <div className="col-md-7">
@@ -249,8 +231,20 @@ export const AdminAddEvents = () => {
                       <label htmlFor="eventType" className="form-label">
                         Event Type
                       </label>
-                      <input type="text" className="form-control" id="event_type" value={event.event_type} onChange={handleInputChange} />
-                    </div>
+                      {/* Dropdown for event type */}
+                      <select
+                        className="form-select"
+                        id="event_type"
+                        value={event.event_type}
+                        onChange={handleInputChange}
+                      >
+                        <option value="">Select Event Type</option>
+                        {eventTypeOptions.map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>                    </div>
                     <div className="mb-3">
                       <label htmlFor="date" className="form-label">
                         Date
@@ -273,7 +267,7 @@ export const AdminAddEvents = () => {
                       <label htmlFor="maxSlots" className="form-label">
                         Max Slots
                       </label>
-                      <input className="form-control" id="max_slots" rows="3" value={event.max_slots} onChange={handleInputChange}></input>
+                      <input className="form-control" id="max_slots" rows="3" type="number" value={event.max_slots} onChange={handleInputChange}></input>
                     </div>
                     <div className="mb-3">
                       <label htmlFor="description" className="form-label">

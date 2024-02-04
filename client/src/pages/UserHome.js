@@ -28,7 +28,7 @@ export const UserHome = () => {
               Reflecting our commitment to student empowerment, community engagement, and excellence in all endeavors.
             </p>
             <br></br>
-            <button className="all-events-button" style={{ marginBottom: '40px' }}>All Events</button>
+            {/* <button className="all-events-button" style={{ marginBottom: '40px' }}>All Events</button> */}
           </div>
           <div className='col-md-4 blue-section-image' >
             <img src={homeImage} alt="Your Alt Text" />

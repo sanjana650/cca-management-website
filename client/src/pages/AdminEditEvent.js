@@ -6,6 +6,7 @@ import { CheckAdminJWTExpiryAndRole } from '../components/RequireAuth';
 
 export const AdminEditEvent = () => {
   CheckAdminJWTExpiryAndRole();
+
   const params = useParams();
   const navigate = useNavigate();
   const [event, setEvent] = useState({
@@ -51,27 +52,7 @@ export const AdminEditEvent = () => {
     getEventInfo(event_id);
   }, [event_id]);
 
-  const handleDragOver = (e) => {
-    e.preventDefault();
-  };
 
-  const handleDrop = async (e) => {
-    e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    if (file) {
-      try {
-        setLoading(true);
-
-        // Compress the image before setting it
-        const compressedImage = await imageCompression(file);
-        setSelectedImage(compressedImage);
-      } catch (error) {
-        console.error('Error compressing image:', error.message);
-      } finally {
-        setLoading(false);
-      }
-    }
-  };
 
   //handle input change
   const handleInputChange = (e) => {
@@ -121,8 +102,6 @@ export const AdminEditEvent = () => {
 
     try {
 
-      // console.log('Updated state:', event);
-
       //trim the values
       const trimmedEvent = Object.fromEntries(
         Object.entries(event).map(([key, value]) => [key, typeof value === 'string' ? value.trim() : value])
@@ -137,6 +116,11 @@ export const AdminEditEvent = () => {
 
       if (isNaN(maxSlotsValue) || !Number.isInteger(maxSlotsValue)) {
         alert('Ensure that the Max Slots value is a valid integer');
+        console.log('Invalid Max Slots value:', trimmedEvent.max_slots);
+        return;
+      }
+      if (maxSlotsValue < 0) {
+        alert('Ensure that the Max Slots value is more than 0');
         console.log('Invalid Max Slots value:', trimmedEvent.max_slots);
         return;
       }
@@ -180,6 +164,8 @@ export const AdminEditEvent = () => {
     }
   }
 
+  // Define options for the event type dropdown
+  const eventTypeOptions = ['Volunteer', 'Workshop', 'Hackathon', 'Outreach'];
 
 
   return (
@@ -202,20 +188,18 @@ export const AdminEditEvent = () => {
                     />
                   )}
                 </div>
-                <div className="mb-2">
-                  <label htmlFor="inputImage" style={{ cursor: 'pointer', textDecoration: 'underline', color: '#1D3C8A' }}>
+                <div style={{ marginTop: '5px', fontSize: '14px' }}>
+                  <label htmlFor="inputImage" style={{ cursor: 'pointer' }}>
                     Change Image
                   </label>
-                  <input
-                    type="file"
-                    id="inputImage"
-                    accept="image/*"
-                    style={{ display: 'none' }}
-                    onChange={handleImageChange}
-                    onClick={(e) => (e.target.value = null)} // Add this line
-                  />
                 </div>
-
+                <input
+                  type="file"
+                  id="inputImage"
+                  accept="image/*"
+                  style={{ display: 'none' }}
+                  onChange={handleImageChange}
+                />
               </div>
 
               <div className="col-md-7">
@@ -232,7 +216,21 @@ export const AdminEditEvent = () => {
                       <label htmlFor="eventType" className="form-label">
                         Event Type
                       </label>
-                      <input type="text" className="form-control" id="event_type" value={event.event_type} onChange={handleInputChange} />
+                      {/* <input type="text" className="form-control" id="event_type" value={event.event_type} onChange={handleInputChange} /> */}
+                      {/* Dropdown for event type */}
+                      <select
+                        className="form-select"
+                        id="event_type"
+                        value={event.event_type}
+                        onChange={handleInputChange}
+                      >
+                        <option value="">Select Event Type</option>
+                        {eventTypeOptions.map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                     <div className="mb-3">
                       <label htmlFor="date" className="form-label">
@@ -256,7 +254,7 @@ export const AdminEditEvent = () => {
                       <label htmlFor="maxSlots" className="form-label">
                         Max Slots
                       </label>
-                      <input className="form-control" id="max_slots" rows="3" value={event.max_slots} onChange={handleInputChange}></input>
+                      <input className="form-control" id="max_slots" type="number" rows="3" value={event.max_slots} onChange={handleInputChange}></input>
                     </div>
                     <div className="mb-3">
                       <label htmlFor="description" className="form-label">
